@@ -9,6 +9,7 @@ if (isset($_POST['submit'])) {
         && isset($_POST["faculty"])
         && isset($_POST["degree_type"])
         && isset($_POST["email"])
+        && isset($_POST["grad_year"])
         && isset($_POST["password"])
         && isset($_POST["password_again"])
         && !empty($_POST["name"])
@@ -16,11 +17,12 @@ if (isset($_POST['submit'])) {
         && !empty($_POST["faculty"])
         && !empty($_POST["degree_type"])
         && !empty($_POST["email"])
+        && !empty($_POST["grad_year"])
         && !empty($_POST["password"])
         && !empty($_POST["password_again"])
         && $_POST["password"] == $_POST["password_again"]
     ){
-        $newMemberID = Member::signup($_POST["name"],$_POST["phone"],$_POST["faculty"],$_POST["degree_type"],$_POST["email"],$_POST["password"]);
+        $newMemberID = Member::signup($_POST["name"],$_POST["phone"],$_POST["faculty"],$_POST["degree_type"],$_POST["email"],$_POST["grad_year"],$_POST["password"]);
         if ($newMemberID>-1){
             $_SESSION['MEMBER_ID'] = $newMemberID;
             header("Location: ?p=login");
@@ -81,6 +83,12 @@ ob_start();
                         <option value="4">Test (test from db)- BCmp</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="form_grad_year_ch">Graduation Year</label>
+                    <input type="text" class="form-control" name="grad_year" id="form_grad_year_ch">
+                </div>
+
                 <div class="form-group">
                     <label for="form_email_ch">Email</label>
                     <input type="text" class="form-control" name="email" id="form_email_ch">

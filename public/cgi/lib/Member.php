@@ -23,10 +23,10 @@ class Member{
         return $stm->fetch();
     }
 
-    public static function signup($name,$phone,$faculty,$degree_type,$email,$password){
+    public static function signup($name,$phone,$faculty,$degree_type,$email,$grad_year,$password){
         $db = LolWut::Instance();
-        $stm = $db->prepare("INSERT INTO MEMBER (NAME,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,EMAIL,PASSWORD) VALUES (?,?,?,?,?,?);");
-        $stm->execute([$name,$phone,$faculty,$degree_type,$email,password_hash($password, PASSWORD_DEFAULT)]);
+        $stm = $db->prepare("INSERT INTO MEMBER (NAME,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,EMAIL,GRAD_YEAR,PASSWORD) VALUES (?,?,?,?,?,?,?);");
+        $stm->execute([$name,$phone,$faculty,$degree_type,$email,$grad_year,password_hash($password, PASSWORD_DEFAULT)]);
 
         return $db->lastInsertId();
     }

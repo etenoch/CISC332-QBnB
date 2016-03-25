@@ -19,20 +19,17 @@ class LolWut extends PDO {
     }
 
     public function __construct() {
-        if(file_exists(CONFIG_FILE)) {
-            $config = parse_ini_file(CONFIG_FILE, true)['Database'];
-            self::mysql($config);
-        } else die("No config file found");
+        self::mysql();
     }
 
 
-    private function mysql($config) {
-        $host = $config['host'];
-        $port = $config['port'];
+    private function mysql() {
+        $host = "localhost";
+        $port = "3306";
 
-        $name = $config['name'];
-        $user = $config['user'];
-        $pass = $config['pass'];
+        $name = "CISC332_DB";
+        $user = "root";
+        $pass = "root";
 
         $dsn = "mysql:host=$host;port=$port;dbname=$name";
         self::connect($dsn, $user, $pass);

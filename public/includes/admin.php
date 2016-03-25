@@ -76,7 +76,7 @@ if (!$logged_in){
     ?>
     <div class="container under_top_bar">
         <h2>Welcome <?=$admin['USERNAME']?></h2>
-
+        <?=json_encode(Booking::getAllBookings())?>
     </div>
     <?php
 }
