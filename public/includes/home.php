@@ -37,8 +37,30 @@ ob_start();
     <div class="col-md-5" id="map_column"><div id="map"></div></div>
     <div class="col-md-7" id="search_results_column">
         <div id="search_results_inner">
-            <input type="text" id="home_search_box" class="form-control"/>
-            <?=json_encode(Property::getAllProperties())?>
+<!--            <input type="text" id="home_search_box" class="form-control"/>-->
+            <h3 style="margin: 1rem;">Featured Properties</h3>
+            <div id="results_container">
+                <?php
+
+                foreach(Property::getAllProperties() as $p){
+                    $image_url = !empty($p['IMAGES']) ? $p['IMAGES'][0] : "https://s3.amazonaws.com/qbnb-uploads/property_placeholder.jpg";
+                    ?>
+                        <div class="property_card">
+                            <div class="img_preview" style="background-image:url(<?=$image_url?>);">&nbsp;</div>
+                            <div class="details">
+                                <h5 class="name"><?=$p['PROPERTY_NAME']?></h5>
+                                <span class="first_row"><?=$p['DISTRICT_NAME']?></span>
+                                <span class="second_row"><?=$p['PRICE']." - ".$p['PROPERTY_TYPE_NAME']?></span>
+                            </div>
+
+                        </div>
+
+
+                    <?php
+                }
+                ?>
+            </div>
+
 
         </div>
 

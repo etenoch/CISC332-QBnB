@@ -5,19 +5,19 @@
 }
 #map_column_container{
     height:100%;
-    width: 100%;
+    width: calc(100% + 15px);
 }
 #map_column{
     height:100%;
-    padding-right: 0;
-    padding-left: 0;
 }
 #search_results_column{
-    padding-left: 0;
     height:100%;
+    overflow: auto;
+    padding-left:0;
+    padding-right:0;
 }
 #search_results_inner{
-    margin-top: 60px;
+    margin-top: 70px;
     margin-left: 10px;
     margin-bottom: 10px;
 }

@@ -5,7 +5,7 @@ class Property{
     private static $PROPERTY_BASE_QRY = "SELECT
                                                 p.PROPERTY_ID, p.ADDRESS_1, p.ADDRESS_2, p.DISTRICT_ID, d.DISTRICT_NAME,
                                                 p.PROPERTY_TYPE_ID, pt.PROPERTY_TYPE_NAME, p.PRICE,
-                                                p.NAME, p.DESCRIPTION, p.LAT, p.LNG,
+                                                p.NAME as PROPERTY_NAME, p.DESCRIPTION, p.LAT, p.LNG,
                                                 m.MEMBER_ID, m.NAME, m.EMAIL, m.PHONE_NUMBER, m.FACULTY_ID, m.DEGREE_TYPE_ID
                                             FROM PROPERTY as p
                                             INNER JOIN MEMBER as m ON m.MEMBER_ID = p.SUPPLIER_MEMBER_ID
@@ -19,7 +19,9 @@ class Property{
         $stm = $db->prepare($qry);
         $stm->execute([$property_id]);
 
-        return $stm->fetch();
+        $results = $stm->fetch();
+        $results['IMAGES'] = self::getPictures($property_id);
+        return $results;
     }
 
     public static function getMemberProperties($member_id){
@@ -29,7 +31,11 @@ class Property{
         $stm = $db->prepare($qry);
         $stm->execute([$member_id]);
 
-        return $stm->fetchAll();
+        $results = $stm->fetchAll();
+        foreach($results as $r){
+            $r['IMAGES'] = self::getPictures($r['PROPERTY_ID']);
+        }
+        return $results;
     }
 
     public static function getAllProperties(){
@@ -39,7 +45,28 @@ class Property{
         $stm = $db->prepare($qry);
         $stm->execute();
 
-        return $stm->fetchAll();
+        $results = $stm->fetchAll();
+        foreach($results as $key => $field){
+            $field['IMAGES'] = self::getPictures($field['PROPERTY_ID']);
+            $results[$key] = $field;
+        }
+        return $results;
+    }
+
+    public static function getPictures($property_id){
+        $db = LolWut::Instance();
+
+        $qry = "SELECT PICTURE_PATH FROM PROPERTY_PICTURE WHERE PROPERTY_ID=?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+
+        $results = $stm->fetchAll();
+
+        $just_the_links = [];
+        foreach($results as $r){
+            $just_the_links[] = $r["PICTURE_PATH"];
+        }
+        return $just_the_links;
     }
 
 
@@ -54,7 +81,7 @@ class Property{
         $newPropId = $db->lastInsertId();
 
         foreach ($pictures as $p){
-            $qry = "INSERT INTO PROPERTY_PICTURE (PROPERTY_PICTURE_ID, PICTURE_PATH) VALUES (?,?)";
+            $qry = "INSERT INTO PROPERTY_PICTURE (PROPERTY_ID, PICTURE_PATH) VALUES (?,?)";
             $stm = $db->prepare($qry);
             $stm->execute([$newPropId,$p]);
         }
