@@ -43,20 +43,37 @@ class Property{
     }
 
 
-    public static function createNewProperty($data){
+    public static function createNewProperty($data, $pictures = []){
         $db = LolWut::Instance();
-
 
         $qry = "INSERT INTO PROPERTY (SUPPLIER_MEMBER_ID, ADDRESS_1, ADDRESS_2, DISTRICT_ID, PROPERTY_TYPE_ID,PRICE,NAME,DESCRIPTION,LAT,LNG)
                               VALUES (?,?,?,?,?,?,?,?,?,?)";
         $stm = $db->prepare($qry);
         $stm->execute([$data['SUPPLIER_MEMBER_ID'],$data['ADDRESS_1'],$data['ADDRESS_2'],$data['DISTRICT_ID'],$data['PROPERTY_TYPE_ID'],$data['PRICE'],$data['NAME'],$data['DESCRIPTION'],$data['LAT'],$data['LNG']]);
 
-        return $db->lastInsertId();
+        $newPropId = $db->lastInsertId();
+
+        foreach ($pictures as $p){
+            $qry = "INSERT INTO PROPERTY_PICTURE (PROPERTY_PICTURE_ID, PICTURE_PATH) VALUES (?,?)";
+            $stm = $db->prepare($qry);
+            $stm->execute([$newPropId,$p]);
+        }
+
+        return $newPropId;
     }
 
+} //  end class Property
 
 
+class PropertyType {
 
+    public static function getPropertyTypes(){
+        $db = LolWut::Instance();
+        $qry = "SELECT * FROM PROPERTY_TYPE;";
+        $stm = $db->prepare($qry);
+        $stm->execute();
+        return $stm->fetchAll();
+    }
 
 }
+

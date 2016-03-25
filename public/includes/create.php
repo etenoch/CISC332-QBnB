@@ -1,5 +1,6 @@
 <?php
 require "cgi/lib/Property.php";
+require "cgi/lib/District.php";
 
 // set page template variables
 $page = [];
@@ -55,14 +56,21 @@ if (!isset($_SESSION['MEMBER_ID'])){
                 <div class="form-group">
                     <label for="form_district">District</label>
                     <select class="form-control" name="district" id="form_district">
-                        <option value="1">Test (load from db)- lol</option>
+                        <?php
+                        foreach (District::getDistricts() as $dt){
+                            echo '<option value="'.$dt['DISTRICT_ID'].'">'.$dt['DISTRICT_NAME'].'</option>';
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="form_property_type">Property Type</label>
                     <select class="form-control" name="property_type" id="form_property_type">
-                        <option value="1">Test (test from db)- lol</option>
-                    </select>
+                        <?php
+                        foreach (PropertyType::getPropertyTypes() as $pt){
+                            echo '<option value="'.$pt['PROPERTY_TYPE_ID'].'">'.$pt['PROPERTY_TYPE_NAME'].'</option>';
+                        }
+                        ?>                    </select>
                 </div>
                 <div class="form-group">
                     <label for="form_price">Price (per week)</label>
@@ -130,7 +138,7 @@ ob_start();
         $.ajax({
             type:"post",
             dataType: "json",
-            data:{"json":JSON.stringify(data)},
+            data:{"json":JSON.stringify(data), "pictures":JSON.stringify(currentPictures)},
             url: "cgi/controller/createProperty.php",
             success: function (jsonResponse) {
                 console.log(jsonResponse);
