@@ -1,4 +1,5 @@
 <?php
+require "cgi/lib/Property.php";
 
 
 // set page template variables
@@ -37,6 +38,8 @@ ob_start();
     <div class="col-md-7" id="search_results_column">
         <div id="search_results_inner">
             <input type="text" id="home_search_box" class="form-control"/>
+            <?=json_encode(Property::getAllProperties())?>
+
         </div>
 
     </div>

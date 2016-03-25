@@ -1,5 +1,5 @@
 <?php
-
+require "cgi/lib/Property.php";
 
 // set page template variables
 $page = [];
@@ -16,9 +16,26 @@ ob_clean();
 
 // page content
 ob_start();
-?>
 
-lol page content
+if (!isset($_SESSION['MEMBER_ID'])){
+    ?>
+    <div class="container under_top_bar">
+        <h3>Create a Listing on QBnB</h3>
+        <a href="?p=login" class="btn btn-primary">Please login first</a>
+
+    </div>
+    <?php
+}else{
+    ?>
+    <div class="container under_top_bar">
+        <h3>Create a Listing on QBnB</h3>
+
+
+
+    </div>
+    <?php
+}
+?>
 
 <?php
 $page['body']= ob_get_contents();

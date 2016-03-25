@@ -1,4 +1,18 @@
 <?php
+require "cgi/lib/Member.php";
+
+// try to login is posted
+$failedLogin = false;
+if (isset($_POST['email'])) {
+    $member_id = Member::login($_POST['email'],$_POST['password']);
+    if ($member_id>-1){
+        $_SESSION['MEMBER_ID'] =$member_id;
+    }else{ // failed login
+        $failedLogin = true;
+    }
+}
+
+
 $logged_in=false;
 if (isset($_SESSION['MEMBER_ID'])){
     $logged_in = true;
@@ -32,6 +46,7 @@ if (!$logged_in){
         <div class="col-md-4">
 
             <h3>Member Login</h3>
+            <?php if ($failedLogin) echo '<div class="alert alert-danger" role="alert">Login failed. Please try again.</div>' ?>
             <form method="post" >
 
                 <div class="form-group">
@@ -47,7 +62,8 @@ if (!$logged_in){
                 <input type="submit" value="Login" class="btn btn-success">
 
             </form>
-
+            <br/>
+            <a href="?p=signup">Not a Member yet? Create an account now!</a>
         </div>
         <div class="col-md-4"></div>
     </div>
@@ -56,12 +72,13 @@ if (!$logged_in){
 
 <?php
 }else{
-?>
+    $member = Member::getMember($_SESSION['MEMBER_ID']);
+    ?>
     <div class="container under_top_bar">
-        <h2>Welcome Member</h2>
+        <h2>Welcome <?=$member['NAME']?></h2>
 
     </div>
-<?php
+    <?php
 }
 $page['body']= ob_get_contents();
 ob_end_clean();

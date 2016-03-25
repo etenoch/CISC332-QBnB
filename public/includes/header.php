@@ -8,6 +8,11 @@ function generateHeader($page_name){
         $loggedIn = '<li><a href="logout.php">Logout</a></li>';
     }
 
+    $profileText = "Login";
+    if (isset($_SESSION['ADMINISTRATOR_ID']) || isset($_SESSION['MEMBER_ID'])){
+        $profileText = 'Profile';
+    }
+
     return "
         <nav class=\"navbar navbar-inverse navbar-fixed-top\">
             <div class=\"container\">
@@ -23,12 +28,12 @@ function generateHeader($page_name){
                 <div id=\"navbar\" class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
                         <li ".yesActive($page_name,"home")." ><a href=\"?\">Discover</a></li>
-                        <li ".yesActive($page_name,"search")."><a href=\"?p=search\">Search</a></li>
+                        <li ".yesActive($page_name,"create")."><a href=\"?p=create\">Add Listing</a></li>
                         <li ".yesActive($page_name,"about")." ><a href=\"?p=about\">About</a></li>
                     </ul>
                     <ul class=\"nav navbar-nav navbar-right\">
                         <li ".yesActive($page_name,"signup")." ><a href=\"?p=signup\">Sign Up</a></li>
-                        <li ".yesActive($page_name,"login")." ><a href=\"?p=login\">Login</a></li>
+                        <li ".yesActive($page_name,"login")." ><a href=\"?p=login\">".$profileText."</a></li>
                         <li ".yesActive($page_name,"admin")." ><a href=\"?p=admin\">Admin</a></li>
                         ".$loggedIn ."
                     </ul>

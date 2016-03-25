@@ -4,9 +4,9 @@ require "cgi/lib/Admin.php";
 // try to login is posted
 $failedLogin = false;
 if (isset($_POST['username'])) {
-    $callLogin =Admin::login($_POST['username'],$_POST['password']);
-    if ($callLogin>-1){
-        $_SESSION['ADMINISTRATOR_ID'] =$callLogin;
+    $admin_id =Admin::login($_POST['username'],$_POST['password']);
+    if ($admin_id>-1){
+        $_SESSION['ADMINISTRATOR_ID'] =$admin_id;
     }else{ // failed login
         $failedLogin = true;
     }
@@ -72,9 +72,7 @@ if (!$logged_in){
 
 <?php
 }else{
-
     $admin = Admin::getAdmin($_SESSION['ADMINISTRATOR_ID']);
-
     ?>
     <div class="container under_top_bar">
         <h2>Welcome <?=$admin['USERNAME']?></h2>

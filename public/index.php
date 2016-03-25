@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 require "cgi/base.php";
 include "includes/header.php";
@@ -15,8 +14,7 @@ if (!empty($_GET['p'])) {
         if (!$success) include "includes/error.php";
     }
 }else include "includes/home.php";
-
-?>
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
