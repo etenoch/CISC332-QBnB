@@ -45,6 +45,7 @@ ob_start();
                 foreach(Property::getAllProperties() as $p){
                     $image_url = !empty($p['IMAGES']) ? $p['IMAGES'][0] : "https://s3.amazonaws.com/qbnb-uploads/property_placeholder.jpg";
                     ?>
+                    <a href="?p=listing/<?=$p['PROPERTY_ID']?>">
                         <div class="property_card">
                             <div class="img_preview" style="background-image:url(<?=$image_url?>);">&nbsp;</div>
                             <div class="details">
@@ -54,7 +55,7 @@ ob_start();
                             </div>
 
                         </div>
-
+                    </a>
 
                     <?php
                 }
