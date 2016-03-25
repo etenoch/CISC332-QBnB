@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <?php
-require "config.php";
+require "cgi/base.php";
+include "includes/header.php";
 
 if (!empty($_GET['p'])) {
     $args = $_GET['p'];
     $args = explode("/",$args);
 
-    if (empty($args) || $args[0]== "home") include "pages/home.php";
+    if (empty($args) || $args[0]== "home") include "includes/home.php";
     else {
         $page_name = $args[0];
         $page_args = array_slice($args, 1);
-        $success = include "pages/".$page_name.".php";
-        if (!$success) include "pages/error.php";
+        $success = include "includes/".$page_name.".php";
+        if (!$success) include "includes/error.php";
     }
-}else include "pages/home.php";
+}else include "includes/home.php";
 
 ?>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title><?=$page['title']?> | Queen's Alumni BnB</title>
+    <title><?=$page['title']?> | QBnB</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->
@@ -36,6 +37,7 @@ if (!empty($_GET['p'])) {
     <?=$page['head']?>
 </head>
 <body>
+    <?=generateHeader($page['page_name'])?>
     <?=$page['body']?>
     <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
     <script src="js/vendor/jquery.min.js"></script>
