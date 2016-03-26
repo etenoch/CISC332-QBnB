@@ -93,6 +93,18 @@ body, html{
 }
 
 
+
+/*listing page*/
+#cal_container{
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+#calendar{
+}
+
+
+
 /*footer*/
 #footer{
     margin-top: 40px;

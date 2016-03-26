@@ -14,7 +14,9 @@ $mem = Member::getMember($prop['MEMBER_ID']);
 $page = [];
 $page['page_name'] = basename(__FILE__, '.php');
 $page['title']= $prop["PROPERTY_NAME"];
-$page['head']= "<link rel=\"stylesheet\" href=\"css/vendor/clndr.css\">";
+$page['head']= "<link rel=\"stylesheet\" href=\"css/vendor/jquery-ui.min.css\">
+<link rel=\"stylesheet\" href=\"css/vendor/jquery-ui.structure.min.css\">
+<link rel=\"stylesheet\" href=\"css/vendor/jquery-ui.theme.min.css\">";
 
 // page content
 ob_start();
@@ -58,12 +60,10 @@ ob_start();
         <div class="col-md-4">
             <div class="booking_container">
                 <h5>Book this property - <?=$prop['PRICE']?></h5>
-
-                <div class="form-group">
-                    <label for="form_date">Date</label>
-                    <input type="text" class="form-control" name="date" id="form_date">
+                <div id="cal_container" style="font-size:70%;">
+                    <div id="datepicker"></div>
                 </div>
-                <div id="cal_container">
+                <div id="booking_message">
 
                 </div>
 
@@ -156,10 +156,24 @@ ob_clean();
 // JS
 ob_start();
 ?>
-<script src="js/vendor/underscore.js"></script>
-<script src="js/vendor/moment.js"></script>
-<script src="js/vendor/clndr.js"></script>
+<!--<script src="js/vendor/prototype.js"></script>-->
+<script src="js/vendor/jquery-ui.min.js"></script>
+
+<!--<script src="js/vendor/underscore.js"></script>-->
+<!--<script src="js/vendor/moment.js"></script>-->
+<!--<script src="js/vendor/clndr.js"></script>-->
 <script>
+
+
+    $(function() {
+        $( "#datepicker" ).datepicker({
+            onSelect: function(selectedDate) {
+                $("#booking_message").text(selectedDate);
+            }
+        });
+    });
+
+
     //    $('#cal_container').clndr();
     var lat = <?=$prop['LAT']?>;
     var lng = <?=$prop['LNG']?>;
@@ -175,6 +189,7 @@ ob_start();
         });
 
     }// end init map
+
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvQjc_dNIaallkLt9Xe0PEaKSqsRPWEXQ&callback=initMap" async defer></script>
 
