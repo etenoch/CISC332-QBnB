@@ -136,8 +136,8 @@ ob_start();
             'PRICE': price.val(),
             'NAME': name.val(),
             'DESCRIPTION': description.val(),
-            'LAT': currentLocation.lat,
-            'LNG': currentLocation.lng
+            'LAT': currentLocation ? currentLocation.lat : null,
+            'LNG': currentLocation ? currentLocation.lng : null
         };
 
         $.ajax({
@@ -146,10 +146,14 @@ ob_start();
             data:{"json":JSON.stringify(data), "pictures":JSON.stringify(currentPictures)},
             url: "cgi/controller/createProperty.php",
             success: function (jsonResponse) {
-                console.log(jsonResponse);
+                console.log("Done");
+//                console.log(jsonResponse);
+                var newID = jsonResponse.data;
+                window.location = "?p=listing/"+newID;
+
             },
             error: function(re){
-                console.log(re);
+//                console.log(re);
             }
         });
 
