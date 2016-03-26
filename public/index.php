@@ -1,13 +1,14 @@
 <?php
 require "cgi/base.php";
 include "includes/header.php";
-
+$home = true;
 if (!empty($_GET['p'])) {
     $args = $_GET['p'];
     $args = explode("/",$args);
 
     if (empty($args) || $args[0]== "home") include "includes/home.php";
     else {
+        $home = false;
         $page_name = $args[0];
         $page_args = array_slice($args, 1);
         $success = include "includes/".$page_name.".php";
@@ -35,16 +36,20 @@ if (!empty($_GET['p'])) {
     <?=$page['head']?>
 </head>
 <body>
-    <?=generateHeader($page['page_name'])?>
+    <?php
+    echo generateHeader($page['page_name']);
+    ?>
     <?=$page['body']?>
 
+
+    <?php if (!$home){ ?>
 
     <div id="footer">
         <div class="container">
             QBnB - Made by Enoch Tam, Anastasiya Tarnouskaya, Chris Thomas
         </div>
     </div>
-
+    <?php } ?>
     <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
     <script src="js/vendor/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

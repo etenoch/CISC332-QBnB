@@ -29,6 +29,16 @@ class Member{
         return $stm->fetch();
     }
 
+    public static function update($member_id,$name,$phone,$faculty,$degree_type,$email,$grad_year){
+        $db = LolWut::Instance();
+        $stm = $db->prepare("UPDATE MEMBER SET NAME = ?, PHONE_NUMBER = ?, FACULTY_ID = ?, DEGREE_TYPE_ID = ?, EMAIL = ?, GRAD_YEAR = ?
+                        WHERE MEMBER_ID=?;");
+        $stm->execute([$name,$phone,$faculty,$degree_type,$email,$grad_year,$member_id]);
+
+        return true;
+    }
+
+
     public static function signup($name,$phone,$faculty,$degree_type,$email,$grad_year,$password){
         $db = LolWut::Instance();
         $stm = $db->prepare("INSERT INTO MEMBER (NAME,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,EMAIL,GRAD_YEAR,PASSWORD) VALUES (?,?,?,?,?,?,?);");
