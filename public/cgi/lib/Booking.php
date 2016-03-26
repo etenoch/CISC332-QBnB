@@ -36,4 +36,33 @@ class Booking{
 
     }
 
+    public static function checkDate($year, $month, $day, $property_id){
+        $db = LolWut::Instance();
+        $qry = "SELECT BOOKING_ID, BOOKING_PERIOD
+                FROM BOOKING
+                WHERE PROPERTY_ID = ? and BOOKING_STATUS != 'cancelled';";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+
+        $results = $stm->fetchAll();
+        $bookings = [];
+        foreach($results as $r){
+            $unix_start = strtotime($r['BOOKING_PERIOD']);
+            $unix_end = strtotime("+7 day",$unix_start);
+            $bookings[] = [$unix_start,$unix_end];
+        }
+
+        $target_start = strtotime($year."-".$month."-".$day);
+        $target_end = strtotime("+7 day",$target_start);
+
+        foreach ($bookings as $b){
+
+            if ($b[0] <= $target_start && $target_start <= $b[1]) return false;
+            if ($b[0] <= $target_end && $target_end <= $b[1]) return false;
+
+        }
+        return true;
+    }
+
+
 }

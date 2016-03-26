@@ -67,7 +67,7 @@ ob_start();
 
                 </div>
 
-                <button class="action_button btn btn-info btn-block">Book Now</button>
+                <button class="action_button btn btn-info btn-block disabled" id="booknow_btn">Book Now</button>
             </div>
 
             <div class="booking_container">
@@ -163,30 +163,61 @@ ob_start();
 <!--<script src="js/vendor/moment.js"></script>-->
 <!--<script src="js/vendor/clndr.js"></script>-->
 <script>
+    var property_id=<?=$property_id?>
 
 
     $(function() {
         $( "#datepicker" ).datepicker({
+            dateFormat: 'yy-m-d',
             onSelect: function(selectedDate) {
+                var date = selectedDate.split("-");
+                var uri = "cgi/controller/checkDate.php?year="+date[0]+"&month="+date[1]+"&day="+date[2]+"&property_id="+property_id;
+                console.log(uri);
+                $.ajax({
+                    type:"get",
+                    dataType: "json",
+                    url: uri,
+                    success: function (jsonResponse) {
+                        console.log(jsonResponse);
+                        var goodDate = jsonResponse.data;
+                        if (!goodDate){
+                            $("#booking_message").text("Looks like someone has already booked that date.");
+                            $("#booknow_btn").addClass("disabled");
+                        }else{
+                            $("#booking_message").text("Booking for 7 days starting "+selectedDate);
+                            $("#booknow_btn").removeClass("disabled");
+                        }
+                    },
+                    error: function(re){
+//                console.log(re);
+                    }
+                });
                 $("#booking_message").text(selectedDate);
             }
         });
     });
 
+    var loc = null;
 
-    //    $('#cal_container').clndr();
-    var lat = <?=$prop['LAT']?>;
-    var lng = <?=$prop['LNG']?>;
-    var loc = {lat:lat,lng:lng};
+    <?php if($prop['LAT'] && $prop['LNG']) {?>
+        var lat = <?=$prop['LAT']?>;
+        var lng = <?=$prop['LNG']?>;
+        loc = {lat:lat,lng:lng};
+    <?php }?>
+
+
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('listing_map'), {
-            center: {lat:lat,lng:lng},
-            zoom: 12
-        });
-        new google.maps.Marker({
-            position: loc,
-            map: map
-        });
+        if (loc){
+
+            var map = new google.maps.Map(document.getElementById('listing_map'), {
+                center: loc,
+                zoom: 12
+            });
+            new google.maps.Marker({
+                position: loc,
+                map: map
+            });
+        }
 
     }// end init map
 
