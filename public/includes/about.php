@@ -20,7 +20,7 @@ ob_start();
 
 <div class="container under_top_bar">
     <h2>About QBnB</h2>
-    <p>Bacon ipsum dolor amet ribeye pork chop jerky, bresaola strip steak prosciutto shankle cow shoulder porchetta. Turkey meatball shoulder, short loin doner brisket pork loin beef drumstick capicola sausage landjaeger ground round porchetta. Pork bresaola ham hock, t-bone meatball shankle meatloaf cupim rump swine salami pork loin. Pancetta frankfurter venison beef sirloin fatback pork ground round prosciutto landjaeger filet mignon shank jerky. Turkey sirloin cow picanha ham, chuck tri-tip kielbasa swine drumstick t-bone pastrami fatback cupim. Andouille beef ribs meatball pancetta venison shank. Ham fatback pork belly salami pancetta, doner rump jowl cow.</p>
+    <p>The Queen’s Alumnae BnB service (QBnB) facilitates matching alumni intending to travel to a city with other alumnae offering accommodations to rent in that city. In addition to being able to see each other’s contact information, alumnae are able to see each other’s faculty, degree type and graduation year – allowing the alumnae to connect with each other on a more personal level.</p>
 </div>
 
 <?php

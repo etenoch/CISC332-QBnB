@@ -2,6 +2,7 @@
 require "cgi/lib/Property.php";
 require "cgi/lib/District.php";
 require "cgi/lib/Member.php";
+require "cgi/lib/Misc.php";
 
 
 // fetch correct property
@@ -12,7 +13,7 @@ $mem = Member::getMember($prop['MEMBER_ID']);
 // set page template variables
 $page = [];
 $page['page_name'] = basename(__FILE__, '.php');
-$page['title']= "-- listing name here --";
+$page['title']= $prop["PROPERTY_NAME"];
 $page['head']= "<link rel=\"stylesheet\" href=\"css/vendor/clndr.css\">";
 
 // page content
@@ -118,9 +119,14 @@ ob_start();
 
         <div class="col-md-6">
             <h3>Nearby</h3>
-
-
-
+            <h4><?=$prop['DISTRICT_NAME']?></h4>
+            <ul>
+            <?php
+            foreach (PointOfInterest::getForProperty($prop['PROPERTY_ID']) as $poi){
+                echo "<li>".$poi['POINT_OF_INTEREST_NAME']."</li>";
+            }
+            ?>
+            </ul>
         </div>
         <div class="col-md-6">
             <h3>Reviews</h3>
