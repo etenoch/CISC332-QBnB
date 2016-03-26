@@ -13,20 +13,6 @@ $page['page_name'] = basename(__FILE__, '.php');
 $page['title']= "-- listing name here --";
 $page['head']= "<link rel=\"stylesheet\" href=\"css/vendor/clndr.css\">";
 
-// JS
-ob_start();
-?>
-<script src="js/vendor/underscore.js"></script>
-<script src="js/vendor/moment.js"></script>
-<script src="js/vendor/clndr.js"></script>
-<script>
-//    $('#cal_container').clndr();
-
-</script>
-<?php
-$page['scripts']= ob_get_contents();
-ob_clean();
-
 // page content
 ob_start();
 ?>
@@ -35,7 +21,7 @@ ob_start();
     <h6><?=$prop['PROPERTY_TYPE_NAME']?></h6>
 
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
 
             <div class="booking_container">
                 <h5>Book this property - <?=$prop['PRICE']?></h5>
@@ -67,8 +53,10 @@ ob_start();
 
 
         </div>
-        <div class="col-md-7">
-
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <div id="listing_map" style="height: 300px;"></div>
             <div id="carousel_property_pictures" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <?php
@@ -110,5 +98,35 @@ ob_start();
 </div>
 <?php
 $page['body']= ob_get_contents();
+ob_clean();
+
+
+// JS
+ob_start();
+?>
+<script src="js/vendor/underscore.js"></script>
+<script src="js/vendor/moment.js"></script>
+<script src="js/vendor/clndr.js"></script>
+<script>
+    //    $('#cal_container').clndr();
+    var lat = <?=$prop['LAT']?>;
+    var lng = <?=$prop['LNG']?>;
+    var loc = {lat:lat,lng:lng};
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('listing_map'), {
+            center: {lat:lat,lng:lng},
+            zoom: 12
+        });
+        new google.maps.Marker({
+            position: loc,
+            map: map
+        });
+
+    }// end init map
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvQjc_dNIaallkLt9Xe0PEaKSqsRPWEXQ&callback=initMap" async defer></script>
+
+<?php
+$page['scripts']= ob_get_contents();
 ob_end_clean();
 ?>

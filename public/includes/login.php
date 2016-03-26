@@ -13,13 +13,12 @@ if (isset($_POST['email'])) {
         $failedLogin = true;
     }
 }
-$member_id = $_SESSION['MEMBER_ID'];
+$member_id = -1;
 
 $logged_in=false;
 if (isset($_SESSION['MEMBER_ID'])){
     $logged_in = true;
-
-
+    $member_id = $_SESSION['MEMBER_ID'];
 }
 
 // set page template variables

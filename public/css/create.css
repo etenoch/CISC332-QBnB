@@ -16,5 +16,10 @@
 }
 #file-chooser{
     display: inline-block;
-    width:220px;
+    width:250px;
+}
+#picture_upload_loading_gif{
+    display: none;
+    width:40px;
+    margin-left: 10px;
 }

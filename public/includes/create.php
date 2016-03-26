@@ -49,7 +49,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                     <input type="text" class="form-control" name="address1" id="form_address1">
                 </div>
                 <div class="form-group">
-                    <label for="form_address2">Address (Line 2)</label>
+                    <label for="form_address2">City, State</label>
                     <input type="text" class="form-control" name="address2" id="form_address2">
                 </div>
 
@@ -89,6 +89,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                     <h4>Add pictures</h4>
                     <input type="file" id="file-chooser" />
                     <button id="add_picture_button" class="btn btn-primary"> Upload Image</button>
+                    <img src="img/loading.gif" id="picture_upload_loading_gif">
                     <div id="picture_row"></div>
                 </div>
             </div>
@@ -112,6 +113,10 @@ ob_start();
 <script>
     var alertContainer = $("#alert_container");
     var currentPictures = [];
+    var map;
+    var marker;
+    var currentLocation;
+
     $("#create_listing_btn").click(function(){
         var name = $("#form_name");
         var description = $("#form_description");
@@ -131,8 +136,8 @@ ob_start();
             'PRICE': price.val(),
             'NAME': name.val(),
             'DESCRIPTION': description.val(),
-            'LAT': null,
-            'LNG': null
+            'LAT': currentLocation.lat,
+            'LNG': currentLocation.lng
         };
 
         $.ajax({
@@ -167,6 +172,7 @@ ob_start();
         }
     });
     $("#add_picture_button").click(function(){
+        $("#picture_upload_loading_gif").show();
         var fileChooser = document.getElementById('file-chooser');
         var file = fileChooser.files[0];
         if (file) {
@@ -184,6 +190,7 @@ ob_start();
                     var url = "https://qbnb-uploads.s3.amazonaws.com/"+encodeURIComponent(objKey);
                     currentPictures.push(url);
                     $("#picture_row").append("<div class='preview' style='background-image:url("+url+");'>&nbsp;</div>");
+                    $("#picture_upload_loading_gif").hide();
                 }
             });
         }else{
@@ -193,6 +200,7 @@ ob_start();
 
 
 
+    // map stuff
     function initMap() {
         map = new google.maps.Map(document.getElementById('map_location_picker'), {
             center: {lat: 56, lng: -80},
@@ -202,8 +210,61 @@ ob_start();
                 position: google.maps.ControlPosition.BOTTOM_LEFT
             }
         });
-
+        google.maps.event.addListener(map, 'click', function(event) {
+            placeMarker(event.latLng);
+        });
     }// end init map
+
+
+    $("#form_address1").change(function(){
+        if ($("#form_address2").val()) {
+            geocode($(this).val()+" "+$("#form_address2").val());
+        }else {
+            geocode($(this).val());
+        }
+    });
+
+    $("#form_address2").change(function(){
+
+        if ($("#form_address1").val()) geocode($("#form_address1").val()+" "+$(this).val());
+    });
+
+
+    function geocode(ser){
+        var url = "https://maps.googleapis.com/maps/api/geocode/json?&address="+encodeURIComponent(ser);
+        $.ajax({
+            type:"get",
+            dataType: "json",
+            url: url,
+            success: function (jsonResponse) {
+                var results = jsonResponse.results;
+                if (results.length>0){
+                    var ll = {lat:results[0].geometry.location.lat,lng:results[0].geometry.location.lng};
+                    map.setCenter(ll);
+                    map.setZoom(12);
+                    placeMarker(ll);
+                }
+            },
+            error: function(re){
+                console.log(re);
+            }
+        });
+    }
+
+    function placeMarker(location) {
+        currentLocation = location;
+        if ( marker ) {
+            marker.setPosition(location);
+        } else {
+            marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+    }
+
+
+
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvQjc_dNIaallkLt9Xe0PEaKSqsRPWEXQ&callback=initMap" async defer></script>
 <?php
