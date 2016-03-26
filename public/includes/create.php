@@ -71,7 +71,8 @@ if (!isset($_SESSION['MEMBER_ID'])){
                         foreach (PropertyType::getPropertyTypes() as $pt){
                             echo '<option value="'.$pt['PROPERTY_TYPE_ID'].'">'.$pt['PROPERTY_TYPE_NAME'].'</option>';
                         }
-                        ?>                    </select>
+                        ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="form_price">Price (per week)</label>
