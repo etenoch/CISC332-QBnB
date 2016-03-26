@@ -65,4 +65,20 @@ class Booking{
     }
 
 
+    public static function getBooking($booking_id){
+        $db = LolWut::Instance();
+        $qry = "SELECT BOOKING_ID, CONSUMER_MEMBER_ID, PROPERTY_ID, BOOKING_PERIOD, BOOKING_STATUS FROM BOOKING WHERE BOOKING_ID=?";
+        $stm = $db->prepare($qry);
+        $stm->execute([$booking_id]);
+        return $stm->fetch();
+    }
+
+    public static function createBooking($member_id,$property_id,$booking_period){
+        $db = LolWut::Instance();
+        $qry = "INSERT INTO BOOKING (CONSUMER_MEMBER_ID, PROPERTY_ID, BOOKING_PERIOD, BOOKING_STATUS) VALUES (?,?,?,?);";
+        $stm = $db->prepare($qry);
+        $stm->execute([$member_id,$property_id,$booking_period,"requested"]);
+        return $db->lastInsertId();
+    }
+
 }

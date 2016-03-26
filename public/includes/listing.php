@@ -25,6 +25,8 @@ ob_start();
     <h3>Property: <?=$prop['PROPERTY_NAME']?></h3>
     <h6><?=$prop['PROPERTY_TYPE_NAME']?></h6>
 
+    <div id="alert_container"></div>
+
     <div class="row">
         <div class="col-md-4">
 
@@ -59,7 +61,7 @@ ob_start();
         </div>
         <div class="col-md-4">
             <div class="booking_container">
-                <h5>Book this property - <?=$prop['PRICE']?></h5>
+                <h5>Book this property - $<?=$prop['PRICE']?></h5>
                 <div id="cal_container" style="font-size:70%;">
                     <div id="datepicker"></div>
                 </div>
@@ -67,7 +69,7 @@ ob_start();
 
                 </div>
 
-                <button class="action_button btn btn-info btn-block disabled" id="booknow_btn">Book Now</button>
+                <button class="action_button btn btn-info btn-block disabled" id="booknow_btn">Request Booking</button>
             </div>
 
             <div class="booking_container">
@@ -156,20 +158,19 @@ ob_clean();
 // JS
 ob_start();
 ?>
-<!--<script src="js/vendor/prototype.js"></script>-->
 <script src="js/vendor/jquery-ui.min.js"></script>
-
-<!--<script src="js/vendor/underscore.js"></script>-->
-<!--<script src="js/vendor/moment.js"></script>-->
-<!--<script src="js/vendor/clndr.js"></script>-->
 <script>
-    var property_id=<?=$property_id?>
+    var property_id=<?=$property_id?>;
 
+    var alertContainer = $("#alert_container");
+
+    var currentDate;
 
     $(function() {
         $( "#datepicker" ).datepicker({
             dateFormat: 'yy-m-d',
             onSelect: function(selectedDate) {
+                currentDate = selectedDate;
                 var date = selectedDate.split("-");
                 var uri = "cgi/controller/checkDate.php?year="+date[0]+"&month="+date[1]+"&day="+date[2]+"&property_id="+property_id;
                 console.log(uri);
@@ -197,14 +198,35 @@ ob_start();
         });
     });
 
-    var loc = null;
 
+    $("#booknow_btn").click(function(){
+        var data = {
+            PROPERTY_ID:property_id,
+            BOOKING_PERIOD:currentDate
+        };
+        $.ajax({
+            type:"post",
+            dataType: "json",
+            data:{"json":JSON.stringify(data)},
+            url: "cgi/controller/createBooking.php",
+            success: function (jsonResponse) {
+                alertContainer.append('<div class="alert alert-success" role="alert">Booking has been requested</div>');
+                $("#booking_message").text("");
+                $("#booknow_btn").addClass("disabled");
+            },
+            error: function(re){
+//                console.log(re);
+            }
+        });
+
+    });
+
+    var loc = null;
     <?php if($prop['LAT'] && $prop['LNG']) {?>
         var lat = <?=$prop['LAT']?>;
         var lng = <?=$prop['LNG']?>;
         loc = {lat:lat,lng:lng};
     <?php }?>
-
 
     function initMap() {
         if (loc){
