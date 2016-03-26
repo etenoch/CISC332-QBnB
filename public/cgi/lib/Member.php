@@ -4,7 +4,7 @@ class Member{
 
     public static function login($email,$password){
         $db = LolWut::Instance();
-        $stm = $db->prepare("SELECT MEMBER_ID,NAME,EMAIL,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,PASSWORD FROM MEMBER WHERE EMAIL = ?");
+        $stm = $db->prepare("SELECT MEMBER_ID,NAME,EMAIL,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,PASSWORD,GRAD_YEAR FROM MEMBER WHERE EMAIL = ?");
         $stm->execute([$email]);
 
         $results = $stm->fetch();
@@ -17,7 +17,13 @@ class Member{
 
     public static function getMember($member_id){
         $db = LolWut::Instance();
-        $stm = $db->prepare("SELECT MEMBER_ID,NAME,EMAIL,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,PASSWORD FROM MEMBER WHERE MEMBER_ID = ?");
+        $stm = $db->prepare("SELECT
+                                    m.MEMBER_ID,m.NAME,m.EMAIL,m.PHONE_NUMBER,m.FACULTY_ID,m.DEGREE_TYPE_ID,m.PASSWORD, m.GRAD_YEAR,
+                                    f.FACULTY_NAME, d.DEGREE_TYPE_NAME
+                                FROM MEMBER as m
+                                INNER JOIN FACULTY as f ON f.FACULTY_ID = m.FACULTY_ID
+                                INNER JOIN DEGREE_TYPE as d ON d.DEGREE_TYPE_ID = m.DEGREE_TYPE_ID
+                                WHERE MEMBER_ID = ?");
         $stm->execute([$member_id]);
 
         return $stm->fetch();

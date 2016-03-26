@@ -8,26 +8,6 @@ $page['page_name'] = basename(__FILE__, '.php');
 $page['title']= "Queen's Alumni Rentals";
 $page['head']= "<link rel=\"stylesheet\" href=\"css/home.css\">";
 
-// JS
-ob_start();
-?>
-<script>
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 56, lng: -80},
-            zoom: 3,
-            mapTypeControlOptions: {
-                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                position: google.maps.ControlPosition.BOTTOM_LEFT
-            }
-        });
-
-    }// end init map
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvQjc_dNIaallkLt9Xe0PEaKSqsRPWEXQ&callback=initMap" async defer></script>
-<?php
-$page['scripts']= ob_get_contents();
-ob_clean();
 
 // page content
 ob_start();
@@ -56,7 +36,6 @@ ob_start();
 
                         </div>
                     </a>
-
                     <?php
                 }
                 ?>
@@ -71,5 +50,51 @@ ob_start();
 
 <?php
 $page['body']= ob_get_contents();
+ob_clean();
+
+// JS
+ob_start();
+?>
+<script>
+    var map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 56, lng: -80},
+            zoom: 3,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.BOTTOM_LEFT
+            }
+        });
+
+        $.ajax({
+            type:"get",
+            dataType: "json",
+            url: "cgi/controller/getAllProperties.php",
+            success: function (props) {
+                props.forEach(function(p){
+                    if (p.LAT && p.LNG){
+                        var loc = {lat:parseFloat(p.LAT) ,lng: parseFloat(p.LNG)};
+                        console.log(p);
+                        new google.maps.Marker({
+                            position: loc,
+                            map: map
+                        });
+                    }
+
+                });
+            }, error: function(re){
+//                console.log(re);
+            }
+        });
+
+
+    }// end init map
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvQjc_dNIaallkLt9Xe0PEaKSqsRPWEXQ&callback=initMap" async defer></script>
+<?php
+$page['scripts']= ob_get_contents();
 ob_end_clean();
 ?>

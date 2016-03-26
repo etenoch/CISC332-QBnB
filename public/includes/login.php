@@ -13,12 +13,10 @@ if (isset($_POST['email'])) {
         $failedLogin = true;
     }
 }
-$member_id = -1;
 
 $logged_in=false;
 if (isset($_SESSION['MEMBER_ID'])){
     $logged_in = true;
-    $member_id = $_SESSION['MEMBER_ID'];
 }
 
 // set page template variables
@@ -73,13 +71,14 @@ if (!$logged_in){
 
 <?php
 }else{
-    $member = Member::getMember($_SESSION['MEMBER_ID']);
+    $member_id = $_SESSION['MEMBER_ID'];
+    $member = Member::getMember($member_id);
     ?>
     <div class="container under_top_bar">
         <h2>Welcome <?=$member['NAME']?></h2>
 
         <div class="row">
-            <div class="col-md-6"><?=json_encode(Member::getMember($member_id))?></div>
+            <div class="col-md-6"><?=json_encode($member)?></div>
             <div class="col-md-6"><?=json_encode(Property::getMemberProperties($member_id))?></div>
         </div>
 

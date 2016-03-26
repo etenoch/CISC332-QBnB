@@ -13,6 +13,8 @@ function generateHeader($page_name){
         $profileText = 'Profile';
     }
 
+    $signupItem = !isset($_SESSION['MEMBER_ID']) ? "<li ".yesActive($page_name,"signup")." ><a href=\"?p=signup\">Sign Up</a></li>" : "";
+
     return "
         <nav class=\"navbar navbar-inverse navbar-fixed-top\">
             <div class=\"container\">
@@ -32,7 +34,7 @@ function generateHeader($page_name){
                         <li ".yesActive($page_name,"about")." ><a href=\"?p=about\">About</a></li>
                     </ul>
                     <ul class=\"nav navbar-nav navbar-right\">
-                        <li ".yesActive($page_name,"signup")." ><a href=\"?p=signup\">Sign Up</a></li>
+                        ".$signupItem."
                         <li ".yesActive($page_name,"login")." ><a href=\"?p=login\">".$profileText."</a></li>
                         <li ".yesActive($page_name,"admin")." ><a href=\"?p=admin\">Admin</a></li>
                         ".$loggedIn ."

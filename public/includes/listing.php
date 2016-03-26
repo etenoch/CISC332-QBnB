@@ -1,11 +1,13 @@
 <?php
 require "cgi/lib/Property.php";
 require "cgi/lib/District.php";
+require "cgi/lib/Member.php";
 
 
 // fetch correct property
 $property_id = $page_args[0];
 $prop = Property::getProperty($property_id);
+$mem = Member::getMember($prop['MEMBER_ID']);
 
 // set page template variables
 $page = [];
@@ -24,6 +26,25 @@ ob_start();
         <div class="col-md-4">
 
             <div class="booking_container">
+                <h5>Property Description</h5>
+                <div class="prop_description">
+                    <?=$prop['DESCRIPTION']?>
+                </div>
+            </div>
+
+            <div class="booking_container">
+                <div class="prop_address">
+                    <h5>Location</h5>
+                    <?=$prop['DISTRICT_NAME']?><br/>
+                    <?=$prop['ADDRESS_1']?><br/>
+                    <?=$prop['ADDRESS_2']?>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-4">
+            <div class="booking_container">
                 <h5>Book this property - <?=$prop['PRICE']?></h5>
 
                 <div class="form-group">
@@ -34,34 +55,22 @@ ob_start();
 
                 </div>
 
-
-                <button class="book_property_btn btn btn-info btn-block">Book Now</button>
+                <button class="action_button btn btn-info btn-block">Book Now</button>
             </div>
 
-
-            <div class="prop_description">
-                <?=$prop['DESCRIPTION']?>
+            <div class="booking_container">
+                <h5>Hosted By: <?=$prop['NAME']?></h5>
+                <span class="member_info"><?=$mem['FACULTY_NAME']?> - <?=$mem['DEGREE_TYPE_NAME']?> <?=$mem['GRAD_YEAR']?></span><br/>
+                <span class="member_info">Email: <a href="mailto:<?= $prop['EMAIL'] ?>"><?=$prop['EMAIL']?></a></span>
+                <a href="?p=member/<?=$prop['MEMBER_ID']?>" class="action_button btn btn-default btn-block">View member profile</a>
             </div>
-
-            <div class="prop_address">
-                <h5>Location</h5>
-                <?=$prop['DISTRICT_NAME']?><br/>
-                <?=$prop['ADDRESS_1']?><br/>
-                <?=$prop['ADDRESS_2']?>
-            </div>
-
-
-
         </div>
         <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-            <div id="listing_map" style="height: 300px;"></div>
             <div id="carousel_property_pictures" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <?php
                     $i = 0;
-                    while($i < count($prop['IMAGES'])) {
+                    while($i < count($prop['IMAGES']) && count($prop['IMAGES'])>1 ) {
                         ?><li data-target="#carousel_property_pictures" data-slide-to="<?=$i?>" class="<?php if ($i==0)echo 'active'?>"></li><?php
                         $i++;
                     }
@@ -72,27 +81,53 @@ ob_start();
                     <?php
                     $first = true;
                     foreach($prop['IMAGES'] as $i) {
-                    ?>
-                    <div class="item <?php if ($first)echo 'active'?>">
-                        <img src="<?=$i?>" />
-                    </div>
-                    <?php
-                    $first=false;
+                        ?>
+                        <div class="item <?php if ($first) echo 'active'?>">
+                            <img src="<?=$i?>" />
+                        </div>
+                        <?php
+                        $first=false;
                     }
                     ?>
                 </div>
-
-                <a class="left carousel-control" href="#carousel_property_pictures" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#carousel_property_pictures" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                <?php
+                if(count($prop['IMAGES'])>1) {
+                    ?>
+                    <a class="left carousel-control" href="#carousel_property_pictures" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel_property_pictures" role="button"
+                       data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    <?php
+                }
+                ?>
             </div>
+            <div id="listing_map" style="height: 300px;"></div>
 
         </div>
+    </div>
+
+
+    <br/>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <h3>Nearby</h3>
+
+
+
+        </div>
+        <div class="col-md-6">
+            <h3>Reviews</h3>
+
+        </div>
+
+
     </div>
 
 </div>

@@ -37,6 +37,14 @@ if (!empty($_GET['p'])) {
 <body>
     <?=generateHeader($page['page_name'])?>
     <?=$page['body']?>
+
+
+    <div id="footer">
+        <div class="container">
+            QBnB - Made by Enoch Tam, Anastasiya Tarnouskaya, Chris Thomas
+        </div>
+    </div>
+
     <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
     <script src="js/vendor/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

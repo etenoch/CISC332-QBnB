@@ -176,10 +176,10 @@ ob_start();
         }
     });
     $("#add_picture_button").click(function(){
-        $("#picture_upload_loading_gif").show();
         var fileChooser = document.getElementById('file-chooser');
         var file = fileChooser.files[0];
-        if (file) {
+        if (file && file.type.indexOf("image")>-1) {
+            $("#picture_upload_loading_gif").show();
             var objKey = "img_"+Math.floor(Date.now() / 1000)+"_" + file.name;
             var params = {
                 Key: objKey,
@@ -198,7 +198,7 @@ ob_start();
                 }
             });
         }else{
-             alert('Nothing to upload.');
+             alert('Please select an image file');
         }
     });
 

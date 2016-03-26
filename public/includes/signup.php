@@ -55,48 +55,50 @@ ob_start();
 ?>
 
 <div class="container under_top_bar">
+    <form method="post" >
+    <h3>Create an Account</h3>
+    <?php if ($failedSignup) echo '<div class="alert alert-danger" role="alert">Please fill out all fields correctly.</div>' ?>
 
     <div class="row">
-        <div class="col-md-4"></div>
+        <div class="col-md-2"></div>
         <div class="col-md-4">
 
-            <h3>Create an Account</h3>
-            <?php if ($failedSignup) echo '<div class="alert alert-danger" role="alert">Please fill out all fields correctly.</div>' ?>
-            <form method="post" >
+            <div class="form-group">
+                <label for="form_name_ch">Name</label>
+                <input type="text" class="form-control" name="name" id="form_name_ch">
+            </div>
+            <div class="form-group">
+                <label for="form_phone_ch">Phone</label>
+                <input type="text" class="form-control" name="phone" id="form_phone_ch">
+            </div>
+            <div class="form-group">
+                <label for="form_faculty_ch">Faculty</label>
+                <select class="form-control" name="faculty" id="form_faculty_ch">
+                    <?php
+                    foreach (Faculty::getFaculties() as $dt){
+                        echo '<option value="'.$dt['FACULTY_ID'].'">'.$dt['FACULTY_NAME'].'</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="form_degree_type_ch">Degree</label>
+                <select class="form-control" name="degree_type" id="form_degree_type_ch">
+                    <?php
+                    foreach (DegreeType::getDegreeTypes() as $dt){
+                        echo '<option value="'.$dt['DEGREE_TYPE_ID'].'">'.$dt['DEGREE_TYPE_NAME'].'</option>';
+                    }
+                    ?>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="form_name_ch">Name</label>
-                    <input type="text" class="form-control" name="name" id="form_name_ch">
-                </div>
-                <div class="form-group">
-                    <label for="form_phone_ch">Phone</label>
-                    <input type="text" class="form-control" name="phone" id="form_phone_ch">
-                </div>
-                <div class="form-group">
-                    <label for="form_faculty_ch">Faculty</label>
-                    <select class="form-control" name="faculty" id="form_faculty_ch">
-                        <?php
-                        foreach (Faculty::getFaculties() as $dt){
-                            echo '<option value="'.$dt['FACULTY_ID'].'">'.$dt['FACULTY_NAME'].'</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="form_degree_type_ch">Degree</label>
-                    <select class="form-control" name="degree_type" id="form_degree_type_ch">
-                        <?php
-                        foreach (DegreeType::getDegreeTypes() as $dt){
-                            echo '<option value="'.$dt['DEGREE_TYPE_ID'].'">'.$dt['DEGREE_TYPE_NAME'].'</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="form_grad_year_ch">Graduation Year</label>
+                <input type="text" class="form-control" name="grad_year" id="form_grad_year_ch">
+            </div>
 
-                <div class="form-group">
-                    <label for="form_grad_year_ch">Graduation Year</label>
-                    <input type="text" class="form-control" name="grad_year" id="form_grad_year_ch">
-                </div>
+        </div>
+        <div class="col-md-4">
 
                 <div class="form-group">
                     <label for="form_email_ch">Email</label>
@@ -113,12 +115,14 @@ ob_start();
                     <input type="password" class="form-control" name="password_again" id="form_password_again_ch">
                 </div>
 
-                <input type="submit" name = "submit" value="Sign Up" class="btn btn-success">
 
-            </form>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-2"></div>
     </div>
+        <div style="text-align:center;margin-top:10px;">
+            <input type="submit" name = "submit" value="Sign Up" class="btn btn-success">
+        </div>
+    </form>
 
 </div>
 
