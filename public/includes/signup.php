@@ -1,5 +1,6 @@
 <?php
 require "cgi/lib/Member.php";
+require "cgi/lib/Misc.php";
 
 $failedSignup = false;
 if (isset($_POST['submit'])) {
@@ -74,13 +75,21 @@ ob_start();
                 <div class="form-group">
                     <label for="form_faculty_ch">Faculty</label>
                     <select class="form-control" name="faculty" id="form_faculty_ch">
-                        <option value="5">Test (load from db)- Computing</option>
+                        <?php
+                        foreach (Faculty::getFaculties() as $dt){
+                            echo '<option value="'.$dt['FACULTY_ID'].'">'.$dt['FACULTY_NAME'].'</option>';
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="form_degree_type_ch">Degree</label>
                     <select class="form-control" name="degree_type" id="form_degree_type_ch">
-                        <option value="4">Test (test from db)- BCmp</option>
+                        <?php
+                        foreach (DegreeType::getDegreeTypes() as $dt){
+                            echo '<option value="'.$dt['DEGREE_TYPE_ID'].'">'.$dt['DEGREE_TYPE_NAME'].'</option>';
+                        }
+                        ?>
                     </select>
                 </div>
 

@@ -15,6 +15,7 @@ body, html{
 }
 
 
+/* property card */
 .property_card{
     background: #fff;
     border-radius: 2px;
@@ -25,7 +26,6 @@ body, html{
     position: relative;
     width: 46%;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.1s ease-in-out;
     cursor: pointer;
     position: relative;
 }
@@ -63,3 +63,32 @@ body, html{
     line-height: 24px;
 }
 
+
+/* booking card */
+.booking_container{
+    background: #fff;
+    border-radius: 2px;
+    display: block;
+    float: left;
+    height: 200px;
+    margin: 0;
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.22), 0 1px 2px rgba(0,0,0,0.32);
+    cursor: pointer;
+    padding:10px;
+    position: relative;
+}
+
+.booking_container h5{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.booking_container .book_property_btn{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    margin: 10px;
+    width:95%;
+}
