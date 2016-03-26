@@ -1,5 +1,4 @@
 
-
 <?php
 
 function generateHeader($page_name){
@@ -10,7 +9,8 @@ function generateHeader($page_name){
 
     $profileText = "Login";
     if (isset($_SESSION['ADMINISTRATOR_ID']) || isset($_SESSION['MEMBER_ID'])){
-        $profileText = 'Profile';
+        $me = Member::getMember($_SESSION['MEMBER_ID']);
+        $profileText = $me['NAME'];
     }
 
     $signupItem = !isset($_SESSION['MEMBER_ID']) ? "<li ".yesActive($page_name,"signup")." ><a href=\"?p=signup\">Sign Up</a></li>" : "";
