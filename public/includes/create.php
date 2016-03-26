@@ -1,6 +1,7 @@
 <?php
 require "cgi/lib/Property.php";
 require "cgi/lib/District.php";
+require "cgi/lib/Misc.php";
 
 // set page template variables
 $page = [];
@@ -33,7 +34,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
         <div id="alert_container"></div>
         <div class="row">
             <div class="col-md-4">
-
+                <h6 style="margin-top:0px;">Property Details</h6>
                 <div class="form-group">
                     <label for="form_name">Listing Name</label>
                     <input type="text" class="form-control" name="name" id="form_name">
@@ -78,21 +79,40 @@ if (!isset($_SESSION['MEMBER_ID'])){
                 </div>
 
 
-                <button type="submit" id="create_listing_btn" class="btn btn-success">Create Listing</button>
 
             </div>
-            <div class="col-md-8">
+            <div class="col-md-5">
+                <h6 style="margin-top:0px;">Location</h6>
                 <div id="map_location_picker" style="height: 300px"></div>
                 <span style="float:right;">Correct the location by clicking on the map (if necessary)</span>
                 <br>
                 <div id="pictures_upload_container" style="height: 300px">
-                    <h4>Add pictures</h4>
+                    <h6>Add pictures</h6>
                     <input type="file" id="file-chooser" />
                     <button id="add_picture_button" class="btn btn-primary"> Upload Image</button>
                     <img src="img/loading.gif" id="picture_upload_loading_gif">
                     <div id="picture_row"></div>
                 </div>
             </div>
+            <div class="col-md-3">
+                <h6 style="margin-top:0px;">Property Features</h6>
+                <select class="form-control" id="add_feature_select">
+                    <option value="-1" disabled selected>Choose a feature to add</option>
+                    <option value="-2" >Add a custom feature</option>
+                    <?php
+                    foreach (Feature::getFeatures() as $ft){
+                        echo '<option value="'.$ft['FEATURE_ID'].'">'.$ft['FEATURE_NAME'].'</option>';
+                    }
+                    ?>
+                </select>
+                <ul class="list-group" id="added_features">
+
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button type="submit" id="create_listing_btn" class="btn btn-success btn-lg">Create Listing</button>
         </div>
 
 
@@ -116,6 +136,7 @@ ob_start();
     var map;
     var marker;
     var currentLocation;
+    var currentFeatures = [];
 
     $("#create_listing_btn").click(function(){
         var name = $("#form_name");
@@ -143,7 +164,7 @@ ob_start();
         $.ajax({
             type:"post",
             dataType: "json",
-            data:{"json":JSON.stringify(data), "pictures":JSON.stringify(currentPictures)},
+            data:{"json":JSON.stringify(data), "pictures":JSON.stringify(currentPictures), "features":JSON.stringify(currentFeatures)},
             url: "cgi/controller/createProperty.php",
             success: function (jsonResponse) {
                 console.log("Done");
@@ -266,6 +287,50 @@ ob_start();
             });
         }
     }
+
+
+
+    $("#add_feature_select").change(function(){
+        var ft_id = $('#add_feature_select :selected').val();
+
+        if (parseInt(ft_id) === -2){
+            var feature = prompt("Enter a custom property feature", "");
+            if (feature != null) {
+                var data = {"FEATURE_NAME":feature};
+                $.ajax({
+                    type:"post",
+                    dataType: "json",
+                    data:{"json":JSON.stringify(data)},
+                    url: "cgi/controller/createFeature.php",
+                    success: function (jsonResponse) {
+                        console.log("Done");
+                        console.log(jsonResponse);
+                        var newID = jsonResponse.data;
+                        ft_id = newID;
+                    }, error: function(re){
+                        console.log(re);
+                    }
+                });
+
+            }
+        }
+
+        var ft_name = $('#add_feature_select :selected').text();
+        var ele = $('<li class="list-group-item" data-id="'+ft_id+'">'+ft_name+'</li>');
+        ele.click(function(){
+            var c = confirm("Remove this feature?");
+            if (c){
+                var index = $.inArray(ft_id, currentFeatures);
+                currentFeatures.splice(index, 1);
+                ele.remove();
+            }
+            console.log(currentFeatures);
+        });
+        $("#added_features").append(ele);
+        currentFeatures.push(ft_id);
+
+        $(this).val(-1);
+    });
 
 
 

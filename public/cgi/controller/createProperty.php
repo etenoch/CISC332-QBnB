@@ -11,8 +11,7 @@ $data = json_decode($_POST['json'],true);
 $data['SUPPLIER_MEMBER_ID'] = $_SESSION['MEMBER_ID'];
 
 
-if (isset($_POST['pictures'])){
-    $pictures = json_decode($_POST['pictures'],true);
-    if (!empty($pictures)) echo json_encode(["status"=>true,"data"=>Property::createNewProperty($data,$pictures)]);
-    else echo json_encode(["status"=>true,"data"=>Property::createNewProperty($data)]);
-}
+$pictures = json_decode($_POST['pictures'],true);
+$features = json_decode($_POST['features'],true);
+echo json_encode(["status"=>true,"data"=>Property::createNewProperty($data,$pictures,$features)]);
+

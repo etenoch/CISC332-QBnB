@@ -42,6 +42,17 @@ ob_start();
                 </div>
             </div>
 
+            <div class="booking_container">
+                <h5>Features</h5>
+                <ul class="list-group" id="added_features">
+                <?php
+                foreach (Feature::getForProperty($property_id) as $ft){
+                    echo '<li class="list-group-item">'.$ft['FEATURE_NAME'].'</li>';
+                }
+                ?>
+                </ul>
+            </div>
+
 
         </div>
         <div class="col-md-4">

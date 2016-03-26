@@ -70,7 +70,7 @@ class Property{
     }
 
 
-    public static function createNewProperty($data, $pictures = []){
+    public static function createNewProperty($data, $pictures = [],$features=[]){
         $db = LolWut::Instance();
 
         $qry = "INSERT INTO PROPERTY (SUPPLIER_MEMBER_ID, ADDRESS_1, ADDRESS_2, DISTRICT_ID, PROPERTY_TYPE_ID,PRICE,NAME,DESCRIPTION,LAT,LNG)
@@ -84,6 +84,12 @@ class Property{
             $qry = "INSERT INTO PROPERTY_PICTURE (PROPERTY_ID, PICTURE_PATH) VALUES (?,?)";
             $stm = $db->prepare($qry);
             $stm->execute([$newPropId,$p]);
+        }
+
+        foreach ($features as $f){
+            $qry = "INSERT INTO PROPERTY_FEATURE_LINK (PROPERTY_ID, FEATURE_ID) VALUES (?,?)";
+            $stm = $db->prepare($qry);
+            $stm->execute([$newPropId,$f]);
         }
 
         return $newPropId;

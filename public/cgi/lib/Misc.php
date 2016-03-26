@@ -24,6 +24,38 @@ class DegreeType{
 
 }
 
+class Feature{
+
+    public static function getFeatures(){
+        $db = LolWut::Instance();
+        $qry = "SELECT * FROM FEATURE;";
+        $stm = $db->prepare($qry);
+        $stm->execute();
+        return $stm->fetchAll();
+    }
+
+    public static function getForProperty($property_id){
+        $db = LolWut::Instance();
+        $qry = "SELECT * FROM FEATURE as f
+                INNER JOIN PROPERTY_FEATURE_LINK as pfl ON pfl.FEATURE_ID = f.FEATURE_ID
+                WHERE pfl.PROPERTY_ID = ?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        return $stm->fetchAll();
+    }
+
+    public static function createNewFeature($feature_name){
+        $db = LolWut::Instance();
+        $qry = "INSERT INTO FEATURE (FEATURE_NAME) VALUES (?);";
+        $stm = $db->prepare($qry);
+        $stm->execute([$feature_name]);
+        return $db->lastInsertId();
+    }
+
+
+
+}
+
 class PointOfInterest {
 
     public static function getForProperty($property_id){
