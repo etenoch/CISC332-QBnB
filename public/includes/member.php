@@ -24,8 +24,9 @@ ob_start();
 
 <div class="container under_top_bar">
     <h3><?=$mem['NAME']?></h3>
-    <?=json_encode($mem)?>
-
+    <pre>
+    <?=print_r($mem)?>
+    </pre>
 </div>
 
 <?php

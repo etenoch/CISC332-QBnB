@@ -76,7 +76,7 @@ ob_start();
                 <h5>Hosted By: <?=$prop['NAME']?></h5>
                 <span class="member_info"><?=$mem['FACULTY_NAME']?> - <?=$mem['DEGREE_TYPE_NAME']?> <?=$mem['GRAD_YEAR']?></span><br/>
                 <span class="member_info">Email: <a href="mailto:<?= $prop['EMAIL'] ?>"><?=$prop['EMAIL']?></a></span>
-                <a href="?p=member/<?=$prop['MEMBER_ID']?>" class="action_button btn btn-default btn-block">View member profile</a>
+                <a href="?p=member/<?=$prop['MEMBER_ID']?>" class="action_button btn btn-info btn-block">View member profile</a>
             </div>
         </div>
         <div class="col-md-4">

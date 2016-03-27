@@ -4,7 +4,7 @@ class Member{
 
     public static function login($email,$password){
         $db = LolWut::Instance();
-        $stm = $db->prepare("SELECT MEMBER_ID,NAME,EMAIL,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,PASSWORD,GRAD_YEAR FROM MEMBER WHERE EMAIL = ?");
+        $stm = $db->prepare("SELECT MEMBER_ID,NAME,EMAIL,PHONE_NUMBER,FACULTY_ID,DEGREE_TYPE_ID,PASSWORD,GRAD_YEAR FROM MEMBER WHERE EMAIL = ? AND DELETED=0;");
         $stm->execute([$email]);
 
         $results = $stm->fetch();
@@ -23,7 +23,7 @@ class Member{
                                 FROM MEMBER as m
                                 INNER JOIN FACULTY as f ON f.FACULTY_ID = m.FACULTY_ID
                                 INNER JOIN DEGREE_TYPE as d ON d.DEGREE_TYPE_ID = m.DEGREE_TYPE_ID
-                                WHERE MEMBER_ID = ?");
+                                WHERE MEMBER_ID = ? AND DELETED=0;");
         $stm->execute([$member_id]);
 
         return $stm->fetch();

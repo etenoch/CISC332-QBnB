@@ -15,7 +15,7 @@ class Property{
     public static function getProperty($property_id){
         $db = LolWut::Instance();
 
-        $qry = Property::$PROPERTY_BASE_QRY." WHERE p.PROPERTY_ID = ?;";
+        $qry = Property::$PROPERTY_BASE_QRY." WHERE p.PROPERTY_ID = ? AND p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute([$property_id]);
 
@@ -27,7 +27,7 @@ class Property{
     public static function getMemberProperties($member_id){
         $db = LolWut::Instance();
 
-        $qry = Property::$PROPERTY_BASE_QRY." where m.MEMBER_ID = ?;";
+        $qry = Property::$PROPERTY_BASE_QRY." where m.MEMBER_ID = ? AND p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute([$member_id]);
 
@@ -41,7 +41,7 @@ class Property{
     public static function getAllProperties(){
         $db = LolWut::Instance();
 
-        $qry = Property::$PROPERTY_BASE_QRY.";";
+        $qry = Property::$PROPERTY_BASE_QRY." WHERE p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute();
 
@@ -146,6 +146,16 @@ class Property{
 
         return true;
     }
+
+
+    public static function deleteProperty($property_id){
+        $db = LolWut::Instance();
+        $qry = "UPDATE PROPERTY SET DELETED=1 WHERE PROPERTY_ID=?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        return true;
+    }
+
 
 } //  end class Property
 
