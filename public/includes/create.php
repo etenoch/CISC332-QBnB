@@ -116,7 +116,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                         if ($update) {
                             foreach ($prop['IMAGES'] as $i) {
                                 ?>
-                                <div class="preview" style='background-image:url(<?= $i ?>);'></div>
+                                <div class="preview" style='background-image:url(<?=$i?>);'></div>
                                 <?php
                             }
                         }
@@ -311,6 +311,8 @@ ob_start();
                 var pic_ele = $(this);
                 var bg = pic_ele.css('background-image');
                 bg = bg.replace('url(','').replace(')','');
+                bg  = bg.replace(/^"/, '');
+                bg  = bg.replace(/\"$/, '');
                 currentPictures.push(bg);
                 pic_ele.click(function(){
                     var c = confirm("Remove this image?");
