@@ -145,7 +145,14 @@ ob_start();
             <h3>Reviews</h3>
             <?php
             foreach (Review::getPropertyTopLevelReviews($prop['PROPERTY_ID']) as $re){
-                echo "<div class='review_card'><h6>".$re['COMENT_TEXT']."</h6>".$re['NAME']." - ".$re['RATING']." stars</div >";
+                echo "<div class='review_card'><h6>".$re['COMENT_TEXT']."</h6>".$re['NAME']." - ".$re['RATING']." stars";
+
+                echo "<div class='reply_container'>";
+                foreach(Review::getReplies($re['COMMENT_ID']) as $rp){
+                    echo "<div class='review_card'><h6>".$rp['COMENT_TEXT']."</h6>".$rp['NAME']."</div>";
+                }
+                echo "</div><br/><button class='btn btn-info reply_button' data-toggle='modal' data-target='#reviewModal' data-id='".$re['COMMENT_ID']."' data-booking-id='".$re['BOOKING_ID']."'>Reply</button>";
+                echo "</div>";
             }
             ?>
         </div>

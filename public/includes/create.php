@@ -45,7 +45,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                 <h6 style="margin-top:0px;">Property Details</h6>
                 <div class="form-group">
                     <label for="form_name">Listing Name</label>
-                    <input type="text" class="form-control" value="<?=$update?$prop['NAME']:""?>" name="name" id="form_name">
+                    <input type="text" class="form-control" value="<?=$update?$prop['PROPERTY_NAME']:""?>" name="name" id="form_name">
                 </div>
                 <div class="form-group">
                     <label for="form_description">Description</label>
