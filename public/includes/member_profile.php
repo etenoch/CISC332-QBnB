@@ -29,12 +29,6 @@ $page['page_name'] = basename(__FILE__, '.php');
 $page['title']= "Manage Properties";
 $page['head']= "";
 
-// JS
-ob_start();
-?>
-<?php
-$page['scripts']= ob_get_contents();
-ob_clean();
 
 // page content
 ob_start();
@@ -94,12 +88,15 @@ if ($logged_in){
                     <input type="text" class="form-control" value="<?=$member['GRAD_YEAR']?>" name="grad_year" id="form_grad_year_ch">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 20px;">
                     <label for="form_email_ch">Email</label>
                     <input type="text" class="form-control" value="<?=$member['EMAIL']?>" name="email" id="form_email_ch">
                 </div>
                 <input type="submit" value="Save Changes" name="save_changes" class="btn btn-success"/>
+                <a href="#" id="delete_account_btn" class="btn btn-danger">Delete Account</a>
             </form>
+            <br/>
+
 
         </div>
         <div class="col-md-4"></div>
@@ -112,5 +109,31 @@ if ($logged_in){
     echo "<div class='container under_top_bar'><h4>Please login first <a href='?p=login'>here</h4></div>";
 }
 $page['body']= ob_get_contents();
+ob_clean();
+
+// JS
+ob_start();
+?>
+<script>
+    $("#delete_account_btn").click(function(){
+
+        var c = confirm("Are you sure?");
+        if (c){
+            $.ajax({
+                type:"post",
+                dataType: "json",
+                url: "cgi/controller/deleteMember.php",
+                success: function (jsonResponse) {
+                    window.location="logout.php";
+                },
+                error: function(re){
+                    console.log(re);
+                }
+            });
+        }
+    });
+</script>
+<?php
+$page['scripts']= ob_get_contents();
 ob_end_clean();
 ?>

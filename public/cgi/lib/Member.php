@@ -47,6 +47,13 @@ class Member{
         return $db->lastInsertId();
     }
 
+    public static function deleteMember($member_id){
+        $db = LolWut::Instance();
+        $qry = "UPDATE MEMBER SET DELETED=1 WHERE MEMBER_ID=?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$member_id]);
+        return true;
+    }
 
 
 }
