@@ -9,6 +9,14 @@ class Faculty{
         $stm->execute();
         return $stm->fetchAll();
     }
+    public static function createFaculty($pt_name){
+        $db = LolWut::Instance();
+        $qry = "INSERT INTO FACULTY (FACULTY_NAME) VALUES (?);";
+        $stm = $db->prepare($qry);
+        $stm->execute([$pt_name]);
+        return $db->lastInsertId();
+    }
+
 
 }
 
@@ -21,6 +29,16 @@ class DegreeType{
         $stm->execute();
         return $stm->fetchAll();
     }
+
+
+    public static function createDegreeType($pt_name){
+        $db = LolWut::Instance();
+        $qry = "INSERT INTO DEGREE_TYPE (DEGREE_TYPE_NAME) VALUES (?);";
+        $stm = $db->prepare($qry);
+        $stm->execute([$pt_name]);
+        return $db->lastInsertId();
+    }
+
 
 }
 

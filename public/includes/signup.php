@@ -43,12 +43,7 @@ $page['page_name'] = basename(__FILE__, '.php');
 $page['title']= "Create an account";
 $page['head']= "";
 
-// JS
-ob_start();
-?>
-<?php
-$page['scripts']= ob_get_contents();
-ob_clean();
+
 
 // page content
 ob_start();
@@ -79,6 +74,7 @@ ob_start();
                         echo '<option value="'.$dt['FACULTY_ID'].'">'.$dt['FACULTY_NAME'].'</option>';
                     }
                     ?>
+                    <option value="-1" >Add a custom faculty</option>
                 </select>
             </div>
             <div class="form-group">
@@ -89,6 +85,7 @@ ob_start();
                         echo '<option value="'.$dt['DEGREE_TYPE_ID'].'">'.$dt['DEGREE_TYPE_NAME'].'</option>';
                     }
                     ?>
+                    <option value="-1" >Add a custom degree</option>
                 </select>
             </div>
 
@@ -128,5 +125,64 @@ ob_start();
 
 <?php
 $page['body']= ob_get_contents();
+ob_clean();
+
+// JS
+ob_start();
+?>
+<script>
+    $("#form_faculty_ch").change(function(){
+        var ft_id = $('#form_faculty_ch :selected').val();
+
+        if (parseInt(ft_id) === -1){
+            var dis = prompt("Enter a faculty name", "");
+            if (dis != null) {
+                var data = {"FACULTY_NAME":dis};
+                $.ajax({
+                    type:"post",
+                    dataType: "json",
+                    data:{"json":JSON.stringify(data)},
+                    url: "cgi/controller/createFaculty.php",
+                    success: function (jsonResponse) {
+                        var newID = jsonResponse.data;
+                        $("#form_faculty_ch").prepend("<option value='"+newID+"'>"+dis+"</option>");
+                        $("#form_faculty_ch").val(newID);
+                    }, error: function(re){
+                        console.log(re);
+                    }
+                });
+
+            }
+        }
+    });
+
+    $("#form_degree_type_ch").change(function(){
+        var ft_id = $('#form_degree_type_ch :selected').val();
+
+        if (parseInt(ft_id) === -1){
+            var dis = prompt("Enter a degree type", "");
+            if (dis != null) {
+                var data = {"DEGREE_TYPE_NAME":dis};
+                $.ajax({
+                    type:"post",
+                    dataType: "json",
+                    data:{"json":JSON.stringify(data)},
+                    url: "cgi/controller/createDegreeType.php",
+                    success: function (jsonResponse) {
+                        var newID = jsonResponse.data;
+                        $("#form_degree_type_ch").prepend("<option value='"+newID+"'>"+dis+"</option>");
+                        $("#form_degree_type_ch").val(newID);
+                    }, error: function(re){
+                        console.log(re);
+                    }
+                });
+
+            }
+        }
+    });
+
+</script>
+<?php
+$page['scripts']= ob_get_contents();
 ob_end_clean();
 ?>
