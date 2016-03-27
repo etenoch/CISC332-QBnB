@@ -3,10 +3,18 @@ require "cgi/lib/Property.php";
 require "cgi/lib/District.php";
 require "cgi/lib/Misc.php";
 
+$update = false;
+$prop = null;
+if( count($page_args) == 1  ){
+    $update = true;
+    $prop = Property::getProperty($page_args[0]);
+}
+
+
 // set page template variables
 $page = [];
 $page['page_name'] = basename(__FILE__, '.php');
-$page['title']= "Manage Listing";
+$page['title']= $update? "Update Property" : "Add a new property";
 $page['head']= "<link rel=\"stylesheet\" href=\"css/create.css\">";
 
 // JS
@@ -30,28 +38,28 @@ if (!isset($_SESSION['MEMBER_ID'])){
 }else{
     ?>
     <div class="container under_top_bar">
-        <h3>Create a Listing on QBnB</h3>
+        <h3><?=$update?"Edit Property":"Create a Listing on QBnB"?></h3>
         <div id="alert_container"></div>
         <div class="row">
             <div class="col-md-4">
                 <h6 style="margin-top:0px;">Property Details</h6>
                 <div class="form-group">
                     <label for="form_name">Listing Name</label>
-                    <input type="text" class="form-control" name="name" id="form_name">
+                    <input type="text" class="form-control" value="<?=$update?$prop['NAME']:""?>" name="name" id="form_name">
                 </div>
                 <div class="form-group">
                     <label for="form_description">Description</label>
-                    <textarea name="description" class="form-control" id="form_description" cols="4" rows="2"></textarea>
+                    <textarea name="description" class="form-control" id="form_description" cols="4" rows="2"><?=$update?$prop['DESCRIPTION']:""?></textarea>
                 </div>
 
 
                 <div class="form-group">
                     <label for="form_address1">Address</label>
-                    <input type="text" class="form-control" name="address1" id="form_address1">
+                    <input type="text" class="form-control" value="<?=$update?$prop['ADDRESS_1']:""?>" name="address1" id="form_address1">
                 </div>
                 <div class="form-group">
                     <label for="form_address2">City, State</label>
-                    <input type="text" class="form-control" name="address2" id="form_address2">
+                    <input type="text" class="form-control" value="<?=$update?$prop['ADDRESS_2']:""?>" name="address2" id="form_address2">
                 </div>
 
                 <div class="form-group">
@@ -59,7 +67,10 @@ if (!isset($_SESSION['MEMBER_ID'])){
                     <select class="form-control" name="district" id="form_district">
                         <?php
                         foreach (District::getDistricts() as $dt){
-                            echo '<option value="'.$dt['DISTRICT_ID'].'">'.$dt['DISTRICT_NAME'].'</option>';
+                            if ($prop["DISTRICT_ID"]==$dt['DISTRICT_ID'])
+                                echo '<option selected value="'.$dt['DISTRICT_ID'].'">'.$dt['DISTRICT_NAME'].'</option>';
+                            else echo '<option value="'.$dt['DISTRICT_ID'].'">'.$dt['DISTRICT_NAME'].'</option>';
+
                         }
                         ?>
                         <option value="-1" >Add a custom district</option>
@@ -70,7 +81,9 @@ if (!isset($_SESSION['MEMBER_ID'])){
                     <select class="form-control" name="property_type" id="form_property_type">
                         <?php
                         foreach (PropertyType::getPropertyTypes() as $pt){
-                            echo '<option value="'.$pt['PROPERTY_TYPE_ID'].'">'.$pt['PROPERTY_TYPE_NAME'].'</option>';
+                            if ($prop["PROPERTY_TYPE_ID"]==$pt['PROPERTY_TYPE_ID'])
+                                echo '<option selected value="'.$pt['PROPERTY_TYPE_ID'].'">'.$pt['PROPERTY_TYPE_NAME'].'</option>';
+                            else echo '<option value="'.$pt['PROPERTY_TYPE_ID'].'">'.$pt['PROPERTY_TYPE_NAME'].'</option>';
                         }
                         ?>
                         <option value="-1" >Add a custom property type</option>
@@ -78,7 +91,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                 </div>
                 <div class="form-group">
                     <label for="form_price">Price (per week)</label>
-                    <input type="number" class="form-control" name="price" id="form_price">
+                    <input type="number" class="form-control"  value="<?=$update?$prop['PRICE']:""?>" name="price" id="form_price">
                 </div>
 
 
@@ -88,13 +101,27 @@ if (!isset($_SESSION['MEMBER_ID'])){
                 <h6 style="margin-top:0px;">Location</h6>
                 <div id="map_location_picker" style="height: 300px"></div>
                 <span style="float:right;">Correct the location by clicking on the map (if necessary)</span>
+                <?php if ($update){ ?>
+                    <input type="hidden" id="data_lat" value="<?=$prop['LAT']?>">
+                    <input type="hidden" id="data_lng" value="<?=$prop['LNG']?>">
+                <?php } ?>
                 <br>
                 <div id="pictures_upload_container" style="height: 300px">
                     <h6>Add pictures</h6>
                     <input type="file" id="file-chooser" />
                     <button id="add_picture_button" class="btn btn-primary"> Upload Image</button>
                     <img src="img/loading.gif" id="picture_upload_loading_gif">
-                    <div id="picture_row"></div>
+                    <div id="picture_row">
+                        <?php
+                        if ($update) {
+                            foreach ($prop['IMAGES'] as $i) {
+                                ?>
+                                <div class="preview" style='background-image:url(<?= $i ?>);'></div>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -109,13 +136,19 @@ if (!isset($_SESSION['MEMBER_ID'])){
                     ?>
                 </select>
                 <ul class="list-group" id="added_features">
-
+                    <?php
+                    if ($update){
+                        foreach (Feature::getForProperty($page_args[0]) as $ft){
+                            echo '<li class="list-group-item" data-id="'.$ft['FEATURE_ID'].'">'.$ft['FEATURE_NAME'].'</li>';
+                        }
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
 
         <div style="text-align: center;">
-            <button type="submit" id="create_listing_btn" class="btn btn-success btn-lg">Create Listing</button>
+            <button type="submit" id="create_listing_btn" class="btn btn-success btn-lg"><?=$update?"Edit Listing":"Create Listing"?></button>
         </div>
 
 
@@ -134,12 +167,18 @@ ob_start();
 ?>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
 <script>
+    var update = <?=$update?"true":"false"?>;
+    <?php if ($update){ ?>
+    var property_id = <?=$page_args[0]?>;
+    <?php } ?>
+
     var alertContainer = $("#alert_container");
     var currentPictures = [];
     var map;
     var marker;
     var currentLocation;
     var currentFeatures = [];
+
 
     $("#create_listing_btn").click(function(){
         var name = $("#form_name");
@@ -164,22 +203,35 @@ ob_start();
             'LNG': currentLocation ? currentLocation.lng : null
         };
 
-        $.ajax({
-            type:"post",
-            dataType: "json",
-            data:{"json":JSON.stringify(data), "pictures":JSON.stringify(currentPictures), "features":JSON.stringify(currentFeatures)},
-            url: "cgi/controller/createProperty.php",
-            success: function (jsonResponse) {
-                console.log("Done");
-//                console.log(jsonResponse);
-                var newID = jsonResponse.data;
-                window.location = "?p=listing/"+newID;
-
-            },
-            error: function(re){
-//                console.log(re);
-            }
-        });
+        if (update){
+//            console.log(currentLocation)
+            $.ajax({
+                type:"post",
+                dataType: "json",
+                data:{"json":JSON.stringify(data), PROPERTY_ID:property_id,"pictures":JSON.stringify(currentPictures), "features":JSON.stringify(currentFeatures)},
+                url: "cgi/controller/updateProperty.php",
+                success: function (jsonResponse) {
+                    window.history.back();
+                },
+                error: function(re){
+                    console.log(re);
+                }
+            });
+        }else{
+            $.ajax({
+                type:"post",
+                dataType: "json",
+                data:{"json":JSON.stringify(data), "pictures":JSON.stringify(currentPictures), "features":JSON.stringify(currentFeatures)},
+                url: "cgi/controller/createProperty.php",
+                success: function (jsonResponse) {
+                    var newID = jsonResponse.data;
+                    window.location = "?p=listing/"+newID;
+                },
+                error: function(re){
+                    //console.log(re);
+                }
+            });
+        }
 
 
     });
@@ -217,7 +269,16 @@ ob_start();
                 }else{
                     var url = "https://qbnb-uploads.s3.amazonaws.com/"+encodeURIComponent(objKey);
                     currentPictures.push(url);
-                    $("#picture_row").append("<div class='preview' style='background-image:url("+url+");'>&nbsp;</div>");
+                    var pic_ele = $("<div class='preview' style='background-image:url("+url+");'></div>");
+                    pic_ele.click(function(){
+                        var c = confirm("Remove this image?");
+                        if (c){
+                            var index = $.inArray(url, currentPictures);
+                            currentPictures.splice(index, 1);
+                            pic_ele.remove();
+                        }
+                    });
+                    $("#picture_row").append(pic_ele);
                     $("#picture_upload_loading_gif").hide();
                 }
             });
@@ -239,8 +300,49 @@ ob_start();
             }
         });
         google.maps.event.addListener(map, 'click', function(event) {
-            placeMarker(event.latLng);
+            var loc = {lat:event.latLng.lat(),lng:event.latLng.lng()};
+            placeMarker(loc);
         });
+
+
+        // setup stuff if updating
+        if (update){
+            $("#picture_row").children(".preview").each(function(){
+                var pic_ele = $(this);
+                var bg = pic_ele.css('background-image');
+                bg = bg.replace('url(','').replace(')','');
+                currentPictures.push(bg);
+                pic_ele.click(function(){
+                    var c = confirm("Remove this image?");
+                    if (c){
+                        var index = $.inArray(bg, currentPictures);
+                        currentPictures.splice(index, 1);
+                        pic_ele.remove();
+                    }
+                });
+            });
+
+            $("#added_features").children(".list-group-item").each(function(){
+                var li_ele = $(this);
+                currentFeatures.push(li_ele.attr("data-id"));
+                li_ele.click(function(){
+                    var c = confirm("Remove this feature?");
+                    if (c){
+                        var index = $.inArray(li_ele.attr("data-id"), currentFeatures);
+                        currentFeatures.splice(index, 1);
+                        li_ele.remove();
+                    }
+                });
+            });
+
+            var loc = { lat:parseFloat($("#data_lat").val()), lng:parseFloat($("#data_lng").val())};
+            console.log(loc);
+            map.setCenter(loc);
+            map.setZoom(12);
+            placeMarker(loc);
+        }
+
+
     }// end init map
 
 

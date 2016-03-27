@@ -103,7 +103,36 @@ body, html{
 #calendar{
 }
 
+/*create page*/
+#picture_upload_loading_gif{
+    display: none;
+    width:40px;
+    margin-left: 10px;
+}
+#picture_row{
+    padding: 10px;
+    background: #eee;
+    margin-top: 10px;
+    height:120px;
+}
+#picture_row .preview{
+    display: inline-block;
+    height: 100px;
+    width:100px;
+    background-position: center;
+    background-size: cover;
+    margin-right: 5px;
+    border:3px solid #aaa;
+    cursor:pointer;
+}
+#file-chooser{
+    display: inline-block;
+    width:250px;
+}
 
+#added_features li{
+    cursor:pointer;
+}
 
 /*footer*/
 #footer{

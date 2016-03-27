@@ -95,6 +95,58 @@ class Property{
         return $newPropId;
     }
 
+    public static function updateProperty($property_id,$data,$pictures = [],$features=[]){
+        $db = LolWut::Instance();
+
+        $qry = "UPDATE PROPERTY SET
+                    ADDRESS_1=?,
+                    ADDRESS_2=?,
+                    DISTRICT_ID=?,
+                    PROPERTY_TYPE_ID=?,
+                    PRICE=?,
+                    NAME=?,
+                    DESCRIPTION=?,
+                    LAT=?,
+                    LNG=?
+               WHERE PROPERTY_ID = ?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([
+            $data['ADDRESS_1'],
+            $data['ADDRESS_2'],
+            $data['DISTRICT_ID'],
+            $data['PROPERTY_TYPE_ID'],
+            $data['PRICE'],
+            $data['NAME'],
+            $data['DESCRIPTION'],
+            $data['LAT'],
+            $data['LNG'],
+            $property_id]);
+
+        // delete all pictures
+        $qry = "DELETE FROM PROPERTY_PICTURE WHERE PROPERTY_ID = ?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        // then reinsert all pictures
+        foreach ($pictures as $p){
+            $qry = "INSERT INTO PROPERTY_PICTURE (PROPERTY_ID, PICTURE_PATH) VALUES (?,?)";
+            $stm = $db->prepare($qry);
+            $stm->execute([$property_id,$p]);
+        }
+
+        // delete all features
+        $qry = "DELETE FROM PROPERTY_FEATURE_LINK WHERE PROPERTY_ID = ?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        // reinsert pictures
+        foreach ($features as $f){
+            $qry = "INSERT INTO PROPERTY_FEATURE_LINK (PROPERTY_ID, FEATURE_ID) VALUES (?,?)";
+            $stm = $db->prepare($qry);
+            $stm->execute([$property_id,$f]);
+        }
+
+        return true;
+    }
+
 } //  end class Property
 
 

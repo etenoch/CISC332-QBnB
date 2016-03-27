@@ -3,6 +3,7 @@ require "cgi/lib/Member.php";
 require "cgi/lib/Property.php";
 require "cgi/lib/Misc.php";
 require "cgi/lib/Booking.php";
+require "cgi/lib/District.php";
 
 $property_id = $page_args[0];
 $prop = Property::getProperty($property_id);
@@ -36,6 +37,9 @@ if ($logged_in){
     ?>
 <div class="container under_top_bar">
     <h3>Manage: <?=$prop['PROPERTY_NAME']?></h3>
+
+
+
 
 
 </div>

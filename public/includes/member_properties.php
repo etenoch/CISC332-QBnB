@@ -32,7 +32,7 @@ if ($logged_in){
     <h3>Manage Properties</h3>
     <table class="table table-bordered">
         <tr>
-            <th>Name</th><th>Address</th><th>Type</th><th>Price</th><th>Edit</th><th>Delete</th>
+            <th>Name</th><th>Address</th><th>Type</th><th>Price</th><th>Manage</th><th>Delete</th>
         </tr>
         <?php
         foreach (Property::getMemberProperties($member_id) as $prop){
@@ -41,8 +41,8 @@ if ($logged_in){
                 <td><?=$prop['PROPERTY_NAME']?></td>
                 <td><?=$prop['ADDRESS_1']?></td>
                 <td><?=$prop['PROPERTY_TYPE_NAME']?></td>
-                <td><?=$prop['PRICE']?></td>
-                <td><a href="?p=manage_property/<?=$prop['PROPERTY_ID']?>" class="btn btn-info btn-xs">Manage</a></td>
+                <td>$<?=$prop['PRICE']?></td>
+                <td><a href="?p=create/<?=$prop['PROPERTY_ID']?>" class="btn btn-info btn-xs">Manage</a></td>
                 <td><a href="?p=delete/<?=$prop['PROPERTY_ID']?>" class="btn btn-danger btn-xs">Delete</a></td>
             </tr>
             <?php
