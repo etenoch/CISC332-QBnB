@@ -9,6 +9,7 @@ class Faculty{
         $stm->execute();
         return $stm->fetchAll();
     }
+
     public static function createFaculty($pt_name){
         $db = LolWut::Instance();
         $qry = "INSERT INTO FACULTY (FACULTY_NAME) VALUES (?);";
