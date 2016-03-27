@@ -62,6 +62,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                             echo '<option value="'.$dt['DISTRICT_ID'].'">'.$dt['DISTRICT_NAME'].'</option>';
                         }
                         ?>
+                        <option value="-1" >Add a custom district</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -72,6 +73,7 @@ if (!isset($_SESSION['MEMBER_ID'])){
                             echo '<option value="'.$pt['PROPERTY_TYPE_ID'].'">'.$pt['PROPERTY_TYPE_NAME'].'</option>';
                         }
                         ?>
+                        <option value="-1" >Add a custom property type</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -331,6 +333,61 @@ ob_start();
         currentFeatures.push(ft_id);
 
         $(this).val(-1);
+    });
+
+
+    $("#form_district").change(function(){
+        var ft_id = $('#form_district :selected').val();
+
+        if (parseInt(ft_id) === -1){
+            var dis = prompt("Enter a district", "");
+            if (dis != null) {
+                var data = {"DISTRICT_NAME":dis};
+                $.ajax({
+                    type:"post",
+                    dataType: "json",
+                    data:{"json":JSON.stringify(data)},
+                    url: "cgi/controller/createDistrict.php",
+                    success: function (jsonResponse) {
+                        console.log("Done");
+                        console.log(jsonResponse);
+                        var newID = jsonResponse.data;
+                        $("#form_district").prepend("<option value='"+newID+"'>"+dis+"</option>");
+                        $("#form_district").val(newID);
+                    }, error: function(re){
+                        console.log(re);
+                    }
+                });
+
+            }
+        }
+    });
+
+    $("#form_property_type").change(function(){
+        var ft_id = $('#form_property_type :selected').val();
+
+        if (parseInt(ft_id) === -1){
+            var dis = prompt("Enter a new property type", "");
+            if (dis != null) {
+                var data = {"PROPERTY_TYPE_NAME":dis};
+                $.ajax({
+                    type:"post",
+                    dataType: "json",
+                    data:{"json":JSON.stringify(data)},
+                    url: "cgi/controller/createPropertyType.php",
+                    success: function (jsonResponse) {
+                        console.log("Done");
+                        console.log(jsonResponse);
+                        var newID = jsonResponse.data;
+                        $("#form_property_type").prepend("<option value='"+newID+"'>"+dis+"</option>");
+                        $("#form_property_type").val(newID);
+                    }, error: function(re){
+                        console.log(re);
+                    }
+                });
+
+            }
+        }
     });
 
 

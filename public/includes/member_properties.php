@@ -42,7 +42,7 @@ if ($logged_in){
                 <td><?=$prop['ADDRESS_1']?></td>
                 <td><?=$prop['PROPERTY_TYPE_NAME']?></td>
                 <td><?=$prop['PRICE']?></td>
-                <td><a href="?p=edit/<?=$prop['PROPERTY_ID']?>" class="btn btn-info btn-xs">Edit</a></td>
+                <td><a href="?p=manage_property/<?=$prop['PROPERTY_ID']?>" class="btn btn-info btn-xs">Manage</a></td>
                 <td><a href="?p=delete/<?=$prop['PROPERTY_ID']?>" class="btn btn-danger btn-xs">Delete</a></td>
             </tr>
             <?php

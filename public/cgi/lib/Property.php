@@ -108,5 +108,17 @@ class PropertyType {
         return $stm->fetchAll();
     }
 
+
+
+
+    public static function createPropertyType($pt_name){
+        $db = LolWut::Instance();
+        $qry = "INSERT INTO PROPERTY_TYPE (PROPERTY_TYPE_NAME) VALUES (?);";
+        $stm = $db->prepare($qry);
+        $stm->execute([$pt_name]);
+        return $db->lastInsertId();
+    }
+
+
 }
 
