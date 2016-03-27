@@ -96,3 +96,40 @@ class PointOfInterest {
     }
 
 }
+
+class Review {
+
+    public static function createReview($member_id,$booking_id,$reply_comment_id,$rating, $comment_text){
+        $db = LolWut::Instance();
+        $qry = "INSERT INTO COMMENTS (MEMBER_ID, BOOKING_ID, REPLY_COMMENT_ID, RATING, COMENT_TEXT) VALUES (?,?,?,?,?);";
+        $stm = $db->prepare($qry);
+        $stm->execute([$member_id,$booking_id,$reply_comment_id,$rating, $comment_text]);
+        return $db->lastInsertId();
+    }
+
+    public static function getPropertyTopLevelReviews($property_id){
+        $db = LolWut::Instance();
+        $qry = "SELECT
+                    c.COMMENT_ID,
+                    c.RATING,
+                    c.COMENT_TEXT,
+                    c.REPLY_COMMENT_ID,
+                    c.BOOKING_ID,
+                    c.MEMBER_ID,
+                    m.NAME
+                FROM COMMENTS AS c
+                INNER JOIN BOOKING as b ON b.BOOKING_ID =  c.BOOKING_ID
+                INNER JOIN MEMBER as m ON m.MEMBER_ID=  c.MEMBER_ID
+                WHERE b.PROPERTY_ID = ?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        return $stm->fetchAll();
+
+
+    }
+
+
+}
+
+
+

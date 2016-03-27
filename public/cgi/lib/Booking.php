@@ -94,7 +94,7 @@ class Booking{
 
     public static function getBooking($booking_id){
         $db = LolWut::Instance();
-        $qry = "SELECT BOOKING_ID, CONSUMER_MEMBER_ID, PROPERTY_ID, BOOKING_PERIOD, BOOKING_STATUS FROM BOOKING WHERE BOOKING_ID=?";
+        $qry = Booking::$BASE_QRY." WHERE BOOKING_ID=?";
         $stm = $db->prepare($qry);
         $stm->execute([$booking_id]);
         return $stm->fetch();

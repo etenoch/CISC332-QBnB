@@ -23,7 +23,7 @@ if (isset($_SESSION['MEMBER_ID'])){
 // set page template variables
 $page = [];
 $page['page_name'] = basename(__FILE__, '.php');
-$page['title']= "Login";
+$page['title']= $logged_in?"Member":"Login";
 $page['head']= "";
 
 // JS

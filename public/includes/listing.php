@@ -143,7 +143,11 @@ ob_start();
         </div>
         <div class="col-md-6">
             <h3>Reviews</h3>
-
+            <?php
+            foreach (Review::getPropertyTopLevelReviews($prop['PROPERTY_ID']) as $re){
+                echo "<div class='review_card'><h6>".$re['COMENT_TEXT']."</h6>".$re['NAME']." - ".$re['RATING']." stars</div >";
+            }
+            ?>
         </div>
 
 
