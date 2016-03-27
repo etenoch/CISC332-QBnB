@@ -18,7 +18,7 @@ if (isset($_SESSION['MEMBER_ID'])){
 // set page template variables
 $page = [];
 $page['page_name'] = basename(__FILE__, '.php');
-$page['title']= "Manage Properties";
+$page['title']= "Reviews";
 $page['head']= "";
 
 // JS
@@ -36,7 +36,7 @@ if ($logged_in){
 
     ?>
 <div class="container under_top_bar">
-    <h3>Manage: <?=$prop['PROPERTY_NAME']?></h3>
+    <h3>Manage reviews for property: <?=$prop['PROPERTY_NAME']?></h3>
 
 
 

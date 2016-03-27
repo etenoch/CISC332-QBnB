@@ -1,4 +1,9 @@
 <?php
+
+define("REQUESTED","requested");
+define("CONFIRMED","confirmed");
+define("REJECTED","rejected");
+
 require "cgi/base.php";
 include "includes/header.php";
 $home = true;
