@@ -31,7 +31,7 @@ ob_start();
                             <div class="details">
                                 <h5 class="name"><?=$p['PROPERTY_NAME']?></h5>
                                 <span class="first_row"><?=$p['DISTRICT_NAME']?></span>
-                                <span class="second_row"><?=$p['PRICE']." - ".$p['PROPERTY_TYPE_NAME']?></span>
+                                <span class="second_row">$<?=$p['PRICE']." - ".$p['PROPERTY_TYPE_NAME']?></span>
                             </div>
 
                         </div>

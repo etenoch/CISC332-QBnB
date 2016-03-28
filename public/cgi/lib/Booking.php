@@ -37,7 +37,7 @@ class Booking{
 
     public static function getSupplierBookings($supplier_member_id){
         $db = LolWut::Instance();
-        $qry = Booking::$BASE_QRY." WHERE p.SUPPLIER_MEMBER_ID=? AND b.DELETED=0;";
+        $qry = Booking::$BASE_QRY." WHERE p.SUPPLIER_MEMBER_ID=? AND b.DELETED=0 AND p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute([$supplier_member_id]);
         return $stm->fetchAll();
@@ -45,7 +45,7 @@ class Booking{
 
     public static function getMemberBookings($member_id){
         $db = LolWut::Instance();
-        $qry = Booking::$BASE_QRY." WHERE m.MEMBER_ID=? AND b.DELETED=0;";
+        $qry = Booking::$BASE_QRY." WHERE m.MEMBER_ID=? AND b.DELETED=0 AND p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute([$member_id]);
         return $stm->fetchAll();
@@ -54,7 +54,7 @@ class Booking{
 
     public static function getPropertyBookings($property_id){
         $db = LolWut::Instance();
-        $qry = Booking::$BASE_QRY." WHERE p.PROPERTY_ID=? AND b.DELETED=0;";
+        $qry = Booking::$BASE_QRY." WHERE p.PROPERTY_ID=? AND b.DELETED=0 AND p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute([$property_id]);
         return $stm->fetchAll();
@@ -94,7 +94,7 @@ class Booking{
 
     public static function getBooking($booking_id){
         $db = LolWut::Instance();
-        $qry = Booking::$BASE_QRY." WHERE BOOKING_ID=? AND b.DELETED=0;";
+        $qry = Booking::$BASE_QRY." WHERE BOOKING_ID=? AND b.DELETED=0 AND p.DELETED=0;";
         $stm = $db->prepare($qry);
         $stm->execute([$booking_id]);
         return $stm->fetch();

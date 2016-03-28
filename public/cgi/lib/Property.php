@@ -1,4 +1,5 @@
 <?php
+include_once "Misc.php";
 
 class Property{
 
@@ -48,8 +49,11 @@ class Property{
         $results = $stm->fetchAll();
         foreach($results as $key => $field){
             $field['IMAGES'] = self::getPictures($field['PROPERTY_ID']);
+            $field['FEATURES'] = Feature::getForProperty($field['PROPERTY_ID']);
             $results[$key] = $field;
+
         }
+
         return $results;
     }
 

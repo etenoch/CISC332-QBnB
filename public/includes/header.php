@@ -30,6 +30,7 @@ function generateHeader($page_name){
                     <ul class=\"nav navbar-nav\">
                         <li ".yesActive($page_name,"home")." ><a href=\"?\">Discover</a></li>
                         <li ".yesActive($page_name,"create")."><a href=\"?p=create\">Add Listing</a></li>
+                        <li ".yesActive($page_name,"search")."><a href=\"?p=search\">Search</a></li>
                         <li ".yesActive($page_name,"about")." ><a href=\"?p=about\">About</a></li>
                     </ul>
                     <ul class=\"nav navbar-nav navbar-right\">

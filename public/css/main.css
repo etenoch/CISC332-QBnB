@@ -158,3 +158,35 @@ body, html{
     padding-bottom: 20px;
     color:white;
 }
+
+
+/*search page*/
+#search_select{
+    width:200px;
+    display: inline-block;
+}
+
+
+#loading_gif{
+    width:35px;
+    margin-left: 10px;
+}
+#filter_container{
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+.filter_item{
+    background: #fff;
+    border-radius: 2px;
+    display: block;
+    float: left;
+    margin: 0;
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.42);
+    padding:10px;
+}
+.filter_item h6{
+    margin-top: 0px;
+}
