@@ -1,5 +1,24 @@
 <?php
 require_once "cgi/lib/Admin.php";
+require_once "cgi/lib/Booking.php";
+require_once "cgi/lib/Member.php";
+require_once "cgi/lib/Property.php";
+
+
+if (isset($_POST['delete_property_btn'])){
+    Property::deleteProperty($_POST['delete_property']);
+}
+if (isset($_POST['delete_member_btn'])){
+    Member::deleteMember($_POST['delete_member']);
+}
+if (isset($_POST['delete_admin_btn'])){
+    Admin::deleteAdmin($_POST['delete_admin']);
+}
+if (isset($_POST['add_admin_btn'])){
+    Admin::createAdmin($_POST['admin_username'],$_POST['admin_password']);
+}
+
+
 
 // try to login is posted
 $failedLogin = false;
@@ -26,11 +45,6 @@ $page['page_name'] = basename(__FILE__, '.php');
 $page['title']= "QBnB Administration";
 $page['head']= "";
 
-// JS
-ob_start();
-?>
-<?php
-$page['scripts']="";
 
 // page content
 ob_start();
@@ -76,11 +90,81 @@ if (!$logged_in){
     ?>
     <div class="container under_top_bar">
         <h2>Welcome <?=$admin['USERNAME']?></h2>
-        <?=json_encode(Booking::getAllBookings())?>
+        <div class="well well-sm">
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Delete Property</h5>
+                <form method="post">
+                    <select name="delete_property" id="delete_property" class="form-control">
+                        <option value="-1" disabled selected>Select property to delete</option>
+                        <?php
+                        foreach (Property::getAllProperties() as $property) {
+                            echo '<option value="'.$property['PROPERTY_ID'].'">'.$property['PROPERTY_NAME'].' - '.$property['NAME'].'</option>';
+                        }
+                        ?>
+                    </select>
+                    <input type="submit" name="delete_property_btn" value="Delete" class="btn btn-danger">
+                </form>
+            </div>
+            <div class="col-md-3">
+                <h5>Delete a member</h5>
+                <b>This will also delete all accommodations owned by the member</b>
+                <form method="post">
+                    <select name="delete_member" id="delete_member" class="form-control">
+                        <option value="-1" disabled selected>Select member to delete</option>
+                        <?php
+                        foreach (Member::getAllMembers() as $member) {
+                            echo '<option value="'.$member['MEMBER_ID'].'">'.$member['NAME'].'</option>';
+                        }
+                        ?>
+                    </select>
+                    <input type="submit" name="delete_member_btn" value="Delete" class="btn btn-danger">
+                </form>
+            </div>
+            <div class="col-md-3">
+                <h5>Delete an admin</h5>
+                <form method="post">
+                    <select name="delete_admin" id="delete_admin" class="form-control">
+                        <option value="-1" disabled selected>Select member to delete</option>
+                        <?php
+                        foreach (Admin::getAllAdmins() as $admin) {
+                            echo '<option value="'.$admin['ADMINISTRATOR_ID'].'">'.$admin['USERNAME'].'</option>';
+                        }
+                        ?>
+                    </select>
+                    <input type="submit" name="delete_admin_btn" value="Delete" class="btn btn-danger">
+                </form>
+
+            </div>
+            <div class="col-md-3">
+                <h5>Add an Admin</h5>
+                <form method="post">
+                    Username
+                    <input type="text" name="admin_username" class="form-control">
+                    Password
+                    <input type="password" name="admin_password" class="form-control">
+                    <input type="submit" name="add_admin_btn" value="Create User" class="btn btn-success">
+                </form>
+
+            </div>
+        </div>
+        </div>
+
+
     </div>
     <?php
 }
 
 $page['body']= ob_get_contents();
+ob_clean();
+
+// JS
+ob_start();
+?>
+<?php
+$page['scripts']="";
 ob_end_clean();
 ?>
+
+
+
