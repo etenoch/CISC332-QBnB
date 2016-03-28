@@ -178,35 +178,65 @@ ob_start();
     var currentDate;
 
     $(function() {
-        $( "#datepicker" ).datepicker({
-            dateFormat: 'yy-m-d',
-            onSelect: function(selectedDate) {
-                currentDate = selectedDate;
-                var date = selectedDate.split("-");
-                var uri = "cgi/controller/checkDate.php?year="+date[0]+"&month="+date[1]+"&day="+date[2]+"&property_id="+property_id;
-                console.log(uri);
-                $.ajax({
-                    type:"get",
-                    dataType: "json",
-                    url: uri,
-                    success: function (jsonResponse) {
-                        console.log(jsonResponse);
-                        var goodDate = jsonResponse.data;
-                        if (!goodDate){
-                            $("#booking_message").text("Looks like someone has already booked that date.");
-                            $("#booknow_btn").addClass("disabled");
-                        }else{
-                            $("#booking_message").text("Booking for 7 days starting "+selectedDate);
-                            $("#booknow_btn").removeClass("disabled");
-                        }
+
+        $.ajax({
+            type:"get",
+            dataType: "json",
+            url: "cgi/controller/propertyAvailability.php",
+            data:{"PROPERTY_ID":property_id,"pivot_date":getDate()},
+            success: function (res) {
+
+                var disabledDates = [];
+                for (var key in res.data) {
+                    if (!res.data.hasOwnProperty(key)) continue;
+                    if (res.data[key]==false){
+                        disabledDates.push(key);
+                    }
+                }
+                console.log(disabledDates)
+                $( "#datepicker" ).datepicker({
+                    dateFormat: 'yy-m-d',
+                    beforeShowDay: function(date){
+                        var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                        console.log(string);
+                        return [ disabledDates.indexOf(string) == -1 ]
                     },
-                    error: function(re){
+                    onSelect: function(selectedDate) {
+                        currentDate = selectedDate;
+                        var date = selectedDate.split("-");
+                        var uri = "cgi/controller/checkDate.php?year="+date[0]+"&month="+date[1]+"&day="+date[2]+"&property_id="+property_id;
+                        console.log(uri);
+                        $.ajax({
+                            type:"get",
+                            dataType: "json",
+                            url: uri,
+                            success: function (jsonResponse) {
+                                console.log(jsonResponse);
+                                var goodDate = jsonResponse.data;
+                                if (!goodDate){
+                                    $("#booking_message").text("Looks like that slot is not available. Remember, you must book for 7 days starting on the day of your choice.");
+                                    $("#booknow_btn").addClass("disabled");
+                                }else{
+                                    $("#booking_message").text("Booking for 7 days starting "+selectedDate);
+                                    $("#booknow_btn").removeClass("disabled");
+                                }
+                            },
+                            error: function(re){
 //                console.log(re);
+                            }
+                        });
+                        $("#booking_message").text(selectedDate);
                     }
                 });
-                $("#booking_message").text(selectedDate);
+
+
+
+            },
+            error: function(re){
+                console.log(re);
             }
         });
+
     });
 
 
@@ -253,6 +283,18 @@ ob_start();
         }
 
     }// end init map
+
+    function getDate() {
+        var d = new Date(),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvQjc_dNIaallkLt9Xe0PEaKSqsRPWEXQ&callback=initMap" async defer></script>

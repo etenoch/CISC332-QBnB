@@ -61,8 +61,6 @@ class Booking{
     }
 
 
-
-
     public static function checkDate($year, $month, $day, $property_id){
         $db = LolWut::Instance();
         $qry = "SELECT BOOKING_ID, BOOKING_PERIOD
@@ -89,6 +87,49 @@ class Booking{
 
         }
         return true;
+    }
+
+    public static function getAvailability($property_id,$pivot_date){
+        $final_results = []; // yyyy-mm-dd => true/false
+
+        $db = LolWut::Instance();
+        $qry = "SELECT BOOKING_ID, BOOKING_PERIOD
+                FROM BOOKING
+                WHERE PROPERTY_ID = ? and BOOKING_STATUS = 'confirmed';";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        $results = $stm->fetchAll();
+        $bookings = [];
+        foreach($results as $r){
+            $unix_start = strtotime($r['BOOKING_PERIOD']);
+            $unix_end = strtotime("+7 day",$unix_start);
+            $bookings[] = [$unix_start,$unix_end];
+        }
+
+
+        $pivot_date = strtotime($pivot_date);
+
+        $start_un = strtotime("-60 day",$pivot_date);
+        $end_un = strtotime("+60 day",$pivot_date);
+
+        $start = new DateTime();
+        $start->setTimestamp($start_un);
+        $end = new DateTime();
+        $end->setTimestamp($end_un);
+
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($start, $interval, $end);
+        foreach ( $period as $dt ){
+            $str = $dt->format("Y-m-d");
+            $un = $dt->getTimestamp();
+
+            $good = true;
+            foreach ($bookings as $b){
+                if ($b[0] <= $un && $un <= $b[1]) $good = false;
+            }
+            $final_results[$str]=$good;
+        }
+        return $final_results;
     }
 
 
