@@ -145,6 +145,17 @@ class Review {
         return $stm->fetchAll();
     }
 
+    public static function getAvgRating($property_id){
+        $db = LolWut::Instance();
+        $qry = "SELECT avg(c.RATING) as AVG_RATING
+                FROM BOOKING as b
+                INNER JOIN COMMENTS as c ON c.BOOKING_ID = b.BOOKING_ID
+                WHERE b.PROPERTY_ID=?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$property_id]);
+        return $stm->fetch()['AVG_RATING'];
+    }
+
 
 }
 

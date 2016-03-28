@@ -43,6 +43,36 @@ class Member{
         return $stm->fetchAll();
     }
 
+    public static function getAllSuppliers(){
+        $db = LolWut::Instance();
+        $stm = $db->prepare("SELECT DISTINCT
+                                    m.MEMBER_ID,m.NAME,m.EMAIL,m.PHONE_NUMBER,m.FACULTY_ID,m.DEGREE_TYPE_ID,m.PASSWORD, m.GRAD_YEAR,
+                                    f.FACULTY_NAME, d.DEGREE_TYPE_NAME
+                                FROM MEMBER as m
+                                INNER JOIN FACULTY as f ON f.FACULTY_ID = m.FACULTY_ID
+                                INNER JOIN DEGREE_TYPE as d ON d.DEGREE_TYPE_ID = m.DEGREE_TYPE_ID
+                                INNER JOIN PROPERTY as p ON p.SUPPLIER_MEMBER_ID = m.MEMBER_ID
+                                WHERE m.DELETED=0 AND p.DELETED=0;");
+        $stm->execute();
+
+        return $stm->fetchAll();
+    }
+
+    public static function getAllConsumers(){
+        $db = LolWut::Instance();
+        $stm = $db->prepare("SELECT DISTINCT
+                                    m.MEMBER_ID,m.NAME,m.EMAIL,m.PHONE_NUMBER,m.FACULTY_ID,m.DEGREE_TYPE_ID,m.PASSWORD, m.GRAD_YEAR,
+                                    f.FACULTY_NAME, d.DEGREE_TYPE_NAME
+                                FROM MEMBER as m
+                                INNER JOIN FACULTY as f ON f.FACULTY_ID = m.FACULTY_ID
+                                INNER JOIN DEGREE_TYPE as d ON d.DEGREE_TYPE_ID = m.DEGREE_TYPE_ID
+                                INNER JOIN BOOKING as b ON b.CONSUMER_MEMBER_ID = m.MEMBER_ID
+                                WHERE m.DELETED=0 AND b.DELETED=0;");
+        $stm->execute();
+
+        return $stm->fetchAll();
+    }
+
     public static function update($member_id,$name,$phone,$faculty,$degree_type,$email,$grad_year){
         $db = LolWut::Instance();
         $stm = $db->prepare("UPDATE MEMBER SET NAME = ?, PHONE_NUMBER = ?, FACULTY_ID = ?, DEGREE_TYPE_ID = ?, EMAIL = ?, GRAD_YEAR = ?

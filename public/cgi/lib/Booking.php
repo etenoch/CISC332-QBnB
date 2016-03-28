@@ -14,6 +14,7 @@ class Booking{
                     t.PROPERTY_TYPE_NAME,
                     p.PRICE,
                     m.MEMBER_ID,
+                    m.NAME,
                     m.EMAIL,
                     m.PHONE_NUMBER,
                     f.FACULTY_NAME,

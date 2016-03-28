@@ -149,6 +149,48 @@ if (!$logged_in){
             </div>
         </div>
         </div>
+        <h4>Reports</h4>
+        <h6>Properties</h6>
+        <table class="table table-bordered">
+            <tr><th>Property</th><th>Summarize</th></tr>
+            <?php
+            foreach (Property::getAllProperties() as $pt) {
+                echo '<tr>';
+                echo '<td>'.$pt['PROPERTY_NAME'].'</td>';
+                echo '<td><a href="?p=summarize_property/'.$pt['PROPERTY_ID'].'" class="btn btn-info btn-xs" target="_blank">Summarize</a></td>';
+                echo '</tr>';
+            }
+            ?>
+        </table>
+
+        <h6>Suppliers</h6>
+        <table class="table table-bordered">
+            <tr><th>Supplier</th><th>Summarize</th></tr>
+            <?php
+            foreach (Member::getALlSuppliers() as $pt) {
+                echo '<tr>';
+                echo '<td>'.$pt['NAME'].'</td>';
+                echo '<td><a href="?p=summarize_supplier/'.$pt['MEMBER_ID'].'" class="btn btn-info btn-xs" target="_blank">Summarize</a></td>';
+                echo '</tr>';
+            }
+            ?>
+        </table>
+
+
+        <h6>Consumers</h6>
+        <table class="table table-bordered">
+            <tr><th>Consumer</th><th>Summarize</th></tr>
+            <?php
+            foreach (Member::getALlConsumers() as $pt) {
+                echo '<tr>';
+                echo '<td>'.$pt['NAME'].'</td>';
+                echo '<td><a href="?p=summarize_consumer/'.$pt['MEMBER_ID'].'" class="btn btn-info btn-xs" target="_blank">Summarize</a></td>';
+                echo '</tr>';
+            }
+            ?>
+        </table>
+
+
 
 
     </div>
