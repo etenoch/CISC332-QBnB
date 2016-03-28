@@ -1,9 +1,9 @@
 <?php
-require "cgi/lib/Member.php";
-require "cgi/lib/Property.php";
-require "cgi/lib/Misc.php";
-require "cgi/lib/Booking.php";
-require "cgi/lib/District.php";
+require_once "cgi/lib/Member.php";
+require_once "cgi/lib/Property.php";
+require_once "cgi/lib/Misc.php";
+require_once "cgi/lib/Booking.php";
+require_once "cgi/lib/District.php";
 
 $property_id = $page_args[0];
 $prop = Property::getProperty($property_id);

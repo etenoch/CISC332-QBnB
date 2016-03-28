@@ -1,6 +1,6 @@
 <?php
-require "cgi/lib/Member.php";
-require "cgi/lib/Misc.php";
+require_once "cgi/lib/Member.php";
+require_once "cgi/lib/Misc.php";
 
 $failedSignup = false;
 if (isset($_POST['submit'])) {

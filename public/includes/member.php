@@ -1,5 +1,5 @@
 <?php
-require "cgi/lib/Member.php";
+require_once "cgi/lib/Member.php";
 
 $member_id = $page_args[0];
 $mem = Member::getMember($member_id);

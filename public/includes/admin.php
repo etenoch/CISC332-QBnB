@@ -1,5 +1,5 @@
 <?php
-require "cgi/lib/Admin.php";
+require_once "cgi/lib/Admin.php";
 
 // try to login is posted
 $failedLogin = false;

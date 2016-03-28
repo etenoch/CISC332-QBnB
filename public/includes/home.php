@@ -1,5 +1,5 @@
 <?php
-require "cgi/lib/Property.php";
+require_once "cgi/lib/Property.php";
 
 
 // set page template variables

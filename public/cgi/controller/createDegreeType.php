@@ -1,7 +1,7 @@
 <?php
 
-require "../base.php";
-require "../lib/Misc.php";
+require_once "../base.php";
+require_once "../lib/Misc.php";
 
 $data = json_decode($_POST['json'],true);
 

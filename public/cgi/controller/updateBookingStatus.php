@@ -1,7 +1,7 @@
 <?php
 
-require "../base.php";
-require "../lib/Booking.php";
+require_once "../base.php";
+require_once "../lib/Booking.php";
 
 if (!isset($_SESSION['MEMBER_ID'])) die("Error: not logged in");
 

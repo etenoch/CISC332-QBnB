@@ -1,8 +1,8 @@
 <?php
 
-require "../base.php";
-require "../lib/Misc.php";
-require "../lib/District.php";
+require_once "../base.php";
+require_once "../lib/Misc.php";
+require_once "../lib/District.php";
 
 if (!isset($_SESSION['MEMBER_ID'])) die("Error: not logged in");
 

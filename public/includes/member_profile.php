@@ -1,7 +1,7 @@
 <?php
-require "cgi/lib/Member.php";
-require "cgi/lib/Property.php";
-require "cgi/lib/Misc.php";
+require_once "cgi/lib/Member.php";
+require_once "cgi/lib/Property.php";
+require_once "cgi/lib/Misc.php";
 
 $showSavedMsg = false;
 if(isset($_POST['save_changes'])){

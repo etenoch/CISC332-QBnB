@@ -1,7 +1,7 @@
 <?php
-require "cgi/lib/Property.php";
-require "cgi/lib/District.php";
-require "cgi/lib/Misc.php";
+require_once "cgi/lib/Property.php";
+require_once "cgi/lib/District.php";
+require_once "cgi/lib/Misc.php";
 
 $update = false;
 $prop = null;
