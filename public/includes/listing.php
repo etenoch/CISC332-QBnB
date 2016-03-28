@@ -151,7 +151,7 @@ ob_start();
                 foreach(Review::getReplies($re['COMMENT_ID']) as $rp){
                     echo "<div class='review_card'><h6>".$rp['COMENT_TEXT']."</h6>".$rp['NAME']."</div>";
                 }
-                echo "</div><br/><button class='btn btn-info reply_button' data-toggle='modal' data-target='#reviewModal' data-id='".$re['COMMENT_ID']."' data-booking-id='".$re['BOOKING_ID']."'>Reply</button>";
+                echo "</div>";
                 echo "</div>";
             }
             ?>
