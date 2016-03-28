@@ -117,4 +117,12 @@ class Booking{
         return true;
     }
 
+    public static function deleteBooking($booking_id){
+        $db = LolWut::Instance();
+        $qry = "UPDATE BOOKING SET DELETED=1 WHERE BOOKING_ID = ?;";
+        $stm = $db->prepare($qry);
+        $stm->execute([$booking_id]);
+        return true;
+    }
+
 }

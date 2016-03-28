@@ -27,13 +27,13 @@ if ($logged_in){
     <h3>Manage Bookings</h3>
     <h6>Your bookings at other accommodations</h6>
     <table class="table table-bordered">
-        <tr><th>Name</th><th>Address</th><th>Type</th><th>Booking Period</th><th>Status</th><th>Review</th><th>Listing</th></th></tr>
+        <tr><th>Name</th><th>Address</th><th>Type</th><th>Booking Period</th><th>Status</th><th>Review</th><th>Cancel</th><th>Listing</th></th></tr>
         <?php
         foreach(Booking::getMemberBookings($member_id) as $b){
             if ($b['BOOKING_STATUS']==REQUESTED) $label_type = "primary";
             if ($b['BOOKING_STATUS']==CONFIRMED) $label_type = "success";
             if ($b['BOOKING_STATUS']==REJECTED) $label_type = "danger";
-            echo '<tr><td>'.$b['PROPERTY_NAME'].'</td><td>'.$b['ADDRESS_1'].'</td><td>'.$b['PROPERTY_TYPE_NAME'].'</td><td>'.$b['BOOKING_PERIOD'].'</td><td><span class="label label-'.$label_type.'">'.$b['BOOKING_STATUS'].'</span></td><td><a href="#" data-toggle="modal" data-target="#reviewModal" data-id="'.$b['BOOKING_ID'].'" class="review_btn btn btn-xs btn-info">Write Review</a></td><td><a href="?p=listing/'.$b['PROPERTY_ID'].'" class="btn btn-xs btn-info">View Listing</a></td></tr>';
+            echo '<tr><td>'.$b['PROPERTY_NAME'].'</td><td>'.$b['ADDRESS_1'].'</td><td>'.$b['PROPERTY_TYPE_NAME'].'</td><td>'.$b['BOOKING_PERIOD'].'</td><td><span class="label label-'.$label_type.'">'.$b['BOOKING_STATUS'].'</span></td><td><a href="#" data-toggle="modal" data-target="#reviewModal" data-id="'.$b['BOOKING_ID'].'" class="review_btn btn btn-xs btn-info">Write Review</a></td><td><a href="#" data-id="'.$b['BOOKING_ID'].'" class="cancel_btn btn btn-xs btn-info">Cancel</a></td><td><a href="?p=listing/'.$b['PROPERTY_ID'].'" class="btn btn-xs btn-info">View Listing</a></td></tr>';
         }
         ?>
     </table>
@@ -98,6 +98,26 @@ ob_clean();
 ob_start();
 ?>
 <script>
+
+    $(".cancel_btn").click(function(){
+        var c = confirm("Are you sure?");
+        if (c){
+            var booking_id = $(this).data("id");
+            $.ajax({
+                type:"post",
+                dataType: "json",
+                data:{"BOOKING_ID":booking_id},
+                url: "cgi/controller/deleteBooking.php",
+                success: function (jsonResponse) {
+                    console.log(jsonResponse)
+                },
+                error: function(re){
+                    console.log(re);
+                }
+            });
+            $(this).closest('tr').remove();
+        }
+    });
 
     $('#reviewModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
