@@ -40,7 +40,7 @@ if ($logged_in){
     <br>
     <h6>Other members's bookings at your accommodations</h6>
     <table class="table table-bordered">
-        <tr><th>Name</th><th>Address</th><th>Type</th><th>Booking Period</th><th>Status</th><th>Listing</th></th></tr>
+        <tr><th>Member Name</th><th>Property Name</th><th>Address</th><th>Type</th><th>Booking Period</th><th>Status</th><th>Listing</th></th></tr>
         <?php
         foreach(Booking::getSupplierBookings($member_id) as $b){
             $statues = [REQUESTED,CONFIRMED,REJECTED];
@@ -50,7 +50,7 @@ if ($logged_in){
             }
             $status_select.="</select>";
 
-            echo '<tr><td>'.$b['PROPERTY_NAME'].'</td><td>'.$b['ADDRESS_1'].'</td><td>'.$b['PROPERTY_TYPE_NAME'].'</td><td>'.$b['BOOKING_PERIOD'].'</td><td>'.$status_select.'</td><td><a href="?p=listing/'.$b['PROPERTY_ID'].'" class="btn btn-xs btn-info">View Listing</a></td></tr>';
+            echo '<tr><td>'.$b['NAME'].'</td><td>'.$b['PROPERTY_NAME'].'</td><td>'.$b['ADDRESS_1'].'</td><td>'.$b['PROPERTY_TYPE_NAME'].'</td><td>'.$b['BOOKING_PERIOD'].'</td><td>'.$status_select.'</td><td><a href="?p=listing/'.$b['PROPERTY_ID'].'" class="btn btn-xs btn-info">View Listing</a></td></tr>';
         }
         ?>
     </table>
